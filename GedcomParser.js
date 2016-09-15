@@ -93,7 +93,7 @@ function getTag(line, level) {
     } else {
         tag = tags[1];
     }
-    return tag;
+    return tag.toUpperCase();
 }
 
 /*
@@ -104,7 +104,7 @@ Description: Checks if the tag is valid, given the level
 */
 function isTagValid(tag, level) {
     if (tag === "") return false;
-    if (tag.toUpperCase() in VALIDTAGDICTS[level]) return true;
+    if (tag in VALIDTAGDICTS[level]) return true;
     return false;
 }
 
@@ -115,8 +115,8 @@ Return: Success: tag meaning as a string
 Description: Does a dictionary lookup for the tag to find its meaning
 */
 function getTagMeaning(tag, level) {
-    if (!(tag.toUpperCase() in VALIDTAGDICTS[level])) return "";
-    return VALIDTAGDICTS[level][tag.toUpperCase()];
+    if (!(tag in VALIDTAGDICTS[level])) return "";
+    return VALIDTAGDICTS[level][tag];
 }
 
 /*
@@ -151,18 +151,18 @@ function ParseGedcomData(oFileName, lines) {
 
     fs.writeFileSync(oFileName, ""); // If the result file already exists, erase all data in it
 
+    let line = "";
     let level = "";
     let tag = "";
     let tagMeaning = "";
     let validTag = false;
+    let fileLength = lines.length;
     let parsingIndividual = false;
     let currentIndividual = "";
-    let dateComing = false;
-    let currentDateEvent = "";
 
-    for (let line of lines) {
+    for (let lineIndex = 0; lineIndex < fileLength; ++lineIndex) {
 
-        line = trimSpace(line);
+        line = trimSpace(lines[lineIndex]);
 
         // Write whole line
         if (line === "") continue;
@@ -176,31 +176,28 @@ function ParseGedcomData(oFileName, lines) {
 
         // Find and write tag and meaning
         tag = getTag(line, level);
-        validTag = isTagValid(tag.toUpperCase(), level);
+        validTag = isTagValid(tag, level);
         if (validTag) {
-            tagMeaning = getTagMeaning(tag.toUpperCase(), level);
+            tagMeaning = getTagMeaning(tag, level);
             writeToFile(oFileName, "Tag: " + tag + ", Tag Meaning: " + tagMeaning + "\r\n");
         } else writeToFile(oFileName, "Tag: Invalid tag\r\n");
 
-        if(tag.toUpperCase() === "INDI" && validTag){
+        if(tag === "INDI" && validTag){
             parsingIndividual = true;
             currentIndividual = getID(line);
             individualDict[currentIndividual] = {};
         }
-        else if(tag.toUpperCase() === "FAM" && validTag){
+        else if(tag === "FAM" && validTag){
             parsingIndividual = false;
         }
         else if(parsingIndividual && validTag){
-            if(dateComing){
-                individualDict[currentIndividual][currentDateEvent] = getData(line, level, tag);
-                dateComing = false;
-            }
-            else if(tag.toUpperCase() === "BIRT" || tag.toUpperCase() === "DEAT"){
-                dateComing = true;
-                currentDateEvent = tag.toUpperCase();
-            }
-            else{
-                individualDict[currentIndividual][tag.toUpperCase()] = getData(line, level, tag);
+            if(tag === "BIRT" || tag === "DEAT"){
+                const nextLine = trimSpace(lines[++lineIndex]);
+                const nextLevel = ++level;
+                const nextTag = getTag(nextLine, nextLevel);
+                individualDict[currentIndividual][tag] = getData(nextLine, nextLevel, nextTag);
+            } else {
+                individualDict[currentIndividual][tag] = getData(line, level, tag);
             }
         }
 

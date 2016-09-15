@@ -82,10 +82,6 @@ Line: 1 BIRT
 Level: 1
 Tag: BIRT, Tag Meaning: Birth date of individual
 
-Line: 2 DATE 4 JAN 1994
-Level: 2
-Tag: DATE, Tag Meaning: Date that an event occured
-
 Line: 1 FAMC @F1@
 Level: 1
 Tag: FAMC, Tag Meaning: Family where individual is a child
@@ -113,10 +109,6 @@ Tag: SEX, Tag Meaning: Sex of individaul
 Line: 1 BIRT
 Level: 1
 Tag: BIRT, Tag Meaning: Birth date of individual
-
-Line: 2 DATE 9 JUL 1963
-Level: 2
-Tag: DATE, Tag Meaning: Date that an event occured
 
 Line: 1 FAMS @F1@
 Level: 1
@@ -154,10 +146,6 @@ Line: 1 BIRT
 Level: 1
 Tag: BIRT, Tag Meaning: Birth date of individual
 
-Line: 2 DATE 12 MAR 1964
-Level: 2
-Tag: DATE, Tag Meaning: Date that an event occured
-
 Line: 1 FAMS @F1@
 Level: 1
 Tag: FAMS, Tag Meaning: Family where individual is a spouse
@@ -194,10 +182,6 @@ Line: 1 BIRT
 Level: 1
 Tag: BIRT, Tag Meaning: Birth date of individual
 
-Line: 2 DATE 15 NOV 1918
-Level: 2
-Tag: DATE, Tag Meaning: Date that an event occured
-
 Line: 1 FAMS @F2@
 Level: 1
 Tag: FAMS, Tag Meaning: Family where individual is a spouse
@@ -229,10 +213,6 @@ Tag: SEX, Tag Meaning: Sex of individaul
 Line: 1 BIRT
 Level: 1
 Tag: BIRT, Tag Meaning: Birth date of individual
-
-Line: 2 DATE 5 OCT 1920
-Level: 2
-Tag: DATE, Tag Meaning: Date that an event occured
 
 Line: 1 FAMS @F2@
 Level: 1
@@ -270,10 +250,6 @@ Line: 1 BIRT
 Level: 1
 Tag: BIRT, Tag Meaning: Birth date of individual
 
-Line: 2 DATE 7 OCT 1960
-Level: 2
-Tag: DATE, Tag Meaning: Date that an event occured
-
 Line: 1 FAMC @F4@
 Level: 1
 Tag: FAMC, Tag Meaning: Family where individual is a child
@@ -306,17 +282,9 @@ Line: 1 BIRT
 Level: 1
 Tag: BIRT, Tag Meaning: Birth date of individual
 
-Line: 2 DATE 2 OCT 1925
-Level: 2
-Tag: DATE, Tag Meaning: Date that an event occured
-
 Line: 1 DEAT Y
 Level: 1
 Tag: DEAT, Tag Meaning: Date of death of individual
-
-Line: 2 DATE 29 NOV 1961
-Level: 2
-Tag: DATE, Tag Meaning: Date that an event occured
 
 Line: 1 FAMS @F4@
 Level: 1
@@ -350,10 +318,6 @@ Line: 1 BIRT
 Level: 1
 Tag: BIRT, Tag Meaning: Birth date of individual
 
-Line: 2 DATE 7 OCT 1960
-Level: 2
-Tag: DATE, Tag Meaning: Date that an event occured
-
 Line: 1 FAMC @F4@
 Level: 1
 Tag: FAMC, Tag Meaning: Family where individual is a child
@@ -385,10 +349,6 @@ Tag: SEX, Tag Meaning: Sex of individaul
 Line: 1 BIRT
 Level: 1
 Tag: BIRT, Tag Meaning: Birth date of individual
-
-Line: 2 DATE 15 AUG 1930
-Level: 2
-Tag: DATE, Tag Meaning: Date that an event occured
 
 Line: 1 FAMS @F3@
 Level: 1
@@ -422,10 +382,6 @@ Line: 1 BIRT
 Level: 1
 Tag: BIRT, Tag Meaning: Birth date of individual
 
-Line: 2 DATE 30 JAN 1930
-Level: 2
-Tag: DATE, Tag Meaning: Date that an event occured
-
 Line: 1 FAMS @F3@
 Level: 1
 Tag: FAMS, Tag Meaning: Family where individual is a spouse
@@ -457,10 +413,6 @@ Tag: SEX, Tag Meaning: Sex of individaul
 Line: 1 BIRT
 Level: 1
 Tag: BIRT, Tag Meaning: Birth date of individual
-
-Line: 2 DATE 2 SEP 1966
-Level: 2
-Tag: DATE, Tag Meaning: Date that an event occured
 
 Line: 1 FAMC @F3@
 Level: 1
@@ -494,17 +446,9 @@ Line: 1 BIRT
 Level: 1
 Tag: BIRT, Tag Meaning: Birth date of individual
 
-Line: 2 DATE 19 MAY 1991
-Level: 2
-Tag: DATE, Tag Meaning: Date that an event occured
-
 Line: 1 DEAT Y
 Level: 1
 Tag: DEAT, Tag Meaning: Date of death of individual
-
-Line: 2 DATE 6 NOV 2009
-Level: 2
-Tag: DATE, Tag Meaning: Date that an event occured
 
 Line: 1 FAMC @F1@
 Level: 1
