@@ -121,7 +121,7 @@ function getTagMeaning(tag, level) {
 
 /*
 Input: line: string
-Return: ID: as a string
+Return: string
 Description: Gets ID from a line for INDI or FAM
 */
 function getID(line) {
@@ -131,7 +131,7 @@ function getID(line) {
 
 /*
 Input: line: string, level: string, tag: string
-Return: Data: as a string
+Return: string
 Description: Gets data from a line
 */
 function getData(line, level, tag) {
@@ -158,7 +158,10 @@ function ParseGedcomData(oFileName, lines) {
     let validTag = false;
     let fileLength = lines.length;
     let parsingIndividual = false;
+    let parsingFamily = false;
     let currentIndividual = "";
+    let currentFamily = "";
+    
 
     for (let lineIndex = 0; lineIndex < fileLength; ++lineIndex) {
 
@@ -173,6 +176,10 @@ function ParseGedcomData(oFileName, lines) {
         if (level === "") {
             writeToFile(oFileName, "Level: CANNOT FIND LEVEL\r\n");
         } writeToFile(oFileName, "Level: " + level + "\r\n");
+        if (level === "0"){
+            parsingIndividual = false;
+            parsingFamily = false;
+        }
 
         // Find and write tag and meaning
         tag = getTag(line, level);
@@ -188,16 +195,28 @@ function ParseGedcomData(oFileName, lines) {
             individualDict[currentIndividual] = {};
         }
         else if(tag === "FAM" && validTag){
-            parsingIndividual = false;
+            parsingFamily = true;
+            currentFamily = getID(line);
+            familyDict[currentFamily] = {};
         }
         else if(parsingIndividual && validTag){
             if(tag === "BIRT" || tag === "DEAT"){
                 const nextLine = trimSpace(lines[++lineIndex]);
-                const nextLevel = ++level;
+                const nextLevel = level + 1;
                 const nextTag = getTag(nextLine, nextLevel);
                 individualDict[currentIndividual][tag] = getData(nextLine, nextLevel, nextTag);
-            } else {
+            } else{
                 individualDict[currentIndividual][tag] = getData(line, level, tag);
+            }
+        }
+        else if(parsingFamily && validTag){
+            if(tag === "MARR" || tag === "DIV"){
+                const nextLine = trimSpace(lines[++lineIndex]);
+                const nextLevel = level + 1;
+                const nextTag = getTag(nextLine, nextLevel);
+                familyDict[currentFamily][tag] = getData(nextLine, nextLevel, nextTag);
+            } else{
+                familyDict[currentFamily][tag] = getData(line, level, tag);
             }
         }
 
@@ -232,3 +251,4 @@ const oFileName = "Results.txt";
 const success = ParseGedcomFile(iFileName, oFileName);
 if (success) console.log("All done!");
 console.log(individualDict);
+console.log(familyDict);
