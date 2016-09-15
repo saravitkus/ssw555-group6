@@ -38,6 +38,12 @@ const VALIDTAGDICTS = { "0":   {
                                 }
 };
 
+// Dictionary of individuals
+let individualDict = {};
+
+// Dictionary of families
+let familyDict = {};
+
 /*
 Input: str: string
 Return: string
@@ -114,6 +120,28 @@ function getTagMeaning(tag, level) {
 }
 
 /*
+Input: line: string
+Return: ID: as a string
+Description: Gets ID from a line for INDI or FAM
+*/
+function getID(line) {
+    const tags = line.split(" ");
+    return tags[1];
+}
+
+/*
+Input: line: string, level: string, tag: string
+Return: Data: as a string
+Description: Gets data from a line
+*/
+function getData(line, level, tag) {
+    let data = line.replace(level, "");
+    data = data.replace(tag, "");
+    data = trimSpace(data);
+    return data;
+}
+
+/*
 Input: oFileName: string, lines: array of strings
 Return: none
 Description: Parse the lines one-by-one and find desired data. Then write to oFile.
@@ -126,6 +154,12 @@ function ParseGedcomData(oFileName, lines) {
     let level = "";
     let tag = "";
     let tagMeaning = "";
+    let validTag = false;
+    let parsingIndividual = false;
+    let currentIndividual = "";
+    let dateComing = false;
+    let currentDateEvent = "";
+
     for (let line of lines) {
 
         line = trimSpace(line);
@@ -142,10 +176,33 @@ function ParseGedcomData(oFileName, lines) {
 
         // Find and write tag and meaning
         tag = getTag(line, level);
-        if (isTagValid(tag.toUpperCase(), level)) {
+        validTag = isTagValid(tag.toUpperCase(), level);
+        if (validTag) {
             tagMeaning = getTagMeaning(tag.toUpperCase(), level);
             writeToFile(oFileName, "Tag: " + tag + ", Tag Meaning: " + tagMeaning + "\r\n");
         } else writeToFile(oFileName, "Tag: Invalid tag\r\n");
+
+        if(tag.toUpperCase() === "INDI" && validTag){
+            parsingIndividual = true;
+            currentIndividual = getID(line);
+            individualDict[currentIndividual] = {};
+        }
+        else if(tag.toUpperCase() === "FAM" && validTag){
+            parsingIndividual = false;
+        }
+        else if(parsingIndividual && validTag){
+            if(dateComing){
+                individualDict[currentIndividual][currentDateEvent] = getData(line, level, tag);
+                dateComing = false;
+            }
+            else if(tag.toUpperCase() === "BIRT" || tag.toUpperCase() === "DEAT"){
+                dateComing = true;
+                currentDateEvent = tag.toUpperCase();
+            }
+            else{
+                individualDict[currentIndividual][tag.toUpperCase()] = getData(line, level, tag);
+            }
+        }
 
         writeToFile(oFileName,"\r\n"); // Newline to separate each line's data
     }
@@ -177,3 +234,4 @@ const iFileName = "GEDCOM.txt";
 const oFileName = "Results.txt";
 const success = ParseGedcomFile(iFileName, oFileName);
 if (success) console.log("All done!");
+console.log(individualDict);
