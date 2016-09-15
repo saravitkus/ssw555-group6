@@ -10,27 +10,32 @@ GEDCOM Parser
 const fs = require('fs');
 
 // List of tags with level 0 that are formatted like the rest of tags
-const ZEROTAGS = new Set(["head", "trlr", "note"]);
+const ZEROTAGS = new Set(["HEAD", "TRLR", "NOTE"]);
 
 // Dictionary lookup for tags and their meanings
-const VALIDTAGDICT = {
-    "indi":     "Individual record",
-    "name":     "Name of individual",
-    "sex":      "Sex of individaul",
-    "birt":     "Birth date of individual",
-    "deat":     "Date of death of individual",
-    "famc":     "Family where individual is a child",
-    "fams":     "Family where individual is a spouse",
-    "fam":      "Family record",
-    "marr":     "Marriage event for family",
-    "husb":     "Husband in family",
-    "wife":     "Wife in family",
-    "chil":     "Child in family",
-    "div":      "Divorce event in family",
-    "date":     "Date that an event occured",
-    "head":     "Header record at beginning of file",
-    "trlr":     "Trailer record at end of file",
-    "note":     "Comments, may be used to describe tests"
+const VALIDTAGDICTS = { "0":   {
+                                "INDI":     "Individual record",
+                                "FAM":      "Family record",
+                                "HEAD":     "Header record at beginning of file",
+                                "TRLR":     "Trailer record at end of file",
+                                "NOTE":     "Comments, may be used to describe tests"
+                                },
+                        "1":    {
+                                "NAME":     "Name of individual",
+                                "SEX":      "Sex of individaul",
+                                "BIRT":     "Birth date of individual",
+                                "DEAT":     "Date of death of individual",
+                                "FAMC":     "Family where individual is a child",
+                                "FAMS":     "Family where individual is a spouse",
+                                "MARR":     "Marriage event for family",
+                                "HUSB":     "Husband in family",
+                                "WIFE":     "Wife in family",
+                                "CHIL":     "Child in family",
+                                "DIV":      "Divorce event in family",
+                                },
+                        "2":    {
+                                "DATE":     "Date that an event occured",
+                                }
 };
 
 /*
@@ -76,7 +81,7 @@ function getTag(line, level) {
     const tagLength = tags.length;
     let tag = "";
     if (tagLength < 2) return "";
-    if (level === "0" && !(ZEROTAGS.includes(tags[1].toLowerCase()))) { // Check if it is an exception tag
+    if (level === "0" && !(ZEROTAGS.has(tags[1].toUpperCase()))) { // Check if it is an exception tag
         if (tagLength < 3) return "";
         tag = tags[2];
     } else {
@@ -93,20 +98,19 @@ Description: Checks if the tag is valid, given the level
 */
 function isTagValid(tag, level) {
     if (tag === "") return false;
-    if (level === "1" && tag === "date") return false; // Check for data in level 1
-    if (tag in VALIDTAGDICT) return true;
+    if (tag.toUpperCase() in VALIDTAGDICTS[level]) return true;
     return false;
 }
 
 /*
-Input: tag: string
+Input: tag: string, level: string
 Return: Success: tag meaning as a string
         Failure: blank string
 Description: Does a dictionary lookup for the tag to find its meaning
 */
-function getTagMeaning(tag) {
-    if (!(tag in VALIDTAGDICT)) return "";
-    return VALIDTAGDICT[tag];
+function getTagMeaning(tag, level) {
+    if (!(tag.toUpperCase() in VALIDTAGDICTS[level])) return "";
+    return VALIDTAGDICTS[level][tag.toUpperCase()];
 }
 
 /*
@@ -119,12 +123,14 @@ function ParseGedcomData(oFileName, lines) {
 
     fs.writeFileSync(oFileName, ""); // If the result file already exists, erase all data in it
 
-    let line = "";
     let level = "";
     let tag = "";
     let tagMeaning = "";
-    for (const line of lines) {
-        // Write whole line:
+    for (let line of lines) {
+
+        line = trimSpace(line);
+
+        // Write whole line
         if (line === "") continue;
         writeToFile(oFileName, "Line: " + line + "\r\n");
 
@@ -136,8 +142,8 @@ function ParseGedcomData(oFileName, lines) {
 
         // Find and write tag and meaning
         tag = getTag(line, level);
-        if (isTagValid(tag.toLowerCase(), level)) {
-            tagMeaning = getTagMeaning(tag.toLowerCase());
+        if (isTagValid(tag.toUpperCase(), level)) {
+            tagMeaning = getTagMeaning(tag.toUpperCase(), level);
             writeToFile(oFileName, "Tag: " + tag + ", Tag Meaning: " + tagMeaning + "\r\n");
         } else writeToFile(oFileName, "Tag: Invalid tag\r\n");
 
@@ -167,7 +173,7 @@ function ParseGedcomFile(iFileName, oFileName) {
 }
 
 // Main function to set up file to be parsed and where to put the data
-const iFileName = "Alex Sabella - Project 2.ged";
-const oFileName = "results.txt";
+const iFileName = "GEDCOM.txt";
+const oFileName = "Results.txt";
 const success = ParseGedcomFile(iFileName, oFileName);
 if (success) console.log("All done!");

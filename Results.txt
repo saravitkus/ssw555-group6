@@ -1,0 +1,608 @@
+Line: 0 NOTE Alex Sabella, Dillon Uzar, Sara Vitkus
+Level: 0
+Tag: NOTE, Tag Meaning: Comments, may be used to describe tests
+
+Line: 0 HEAD
+Level: 0
+Tag: HEAD, Tag Meaning: Header record at beginning of file
+
+Line: 1 SOUR Family Echo
+Level: 1
+Tag: Invalid tag
+
+Line: 2 WWW http://www.familyecho.com/
+Level: 2
+Tag: Invalid tag
+
+Line: 1 FILE My Family
+Level: 1
+Tag: Invalid tag
+
+Line: 1 DATE 6 SEP 2016
+Level: 1
+Tag: Invalid tag
+
+Line: 1 DEST ANSTFILE
+Level: 1
+Tag: Invalid tag
+
+Line: 1 GEDC
+Level: 1
+Tag: Invalid tag
+
+Line: 2 VERS 5.5.1
+Level: 2
+Tag: Invalid tag
+
+Line: 2 FORM LINEAGE-LINKED
+Level: 2
+Tag: Invalid tag
+
+Line: 1 SUBM @I1@
+Level: 1
+Tag: Invalid tag
+
+Line: 2 NAME Me
+Level: 2
+Tag: Invalid tag
+
+Line: 1 SUBN
+Level: 1
+Tag: Invalid tag
+
+Line: 1 CHAR UTF-8
+Level: 1
+Tag: Invalid tag
+
+Line: 0 @I1@ INDI
+Level: 0
+Tag: INDI, Tag Meaning: Individual record
+
+Line: 1 NAME Susan /Brown/
+Level: 1
+Tag: NAME, Tag Meaning: Name of individual
+
+Line: 2 GIVN Susan
+Level: 2
+Tag: Invalid tag
+
+Line: 2 SURN Brown
+Level: 2
+Tag: Invalid tag
+
+Line: 2 _MARNM Brown
+Level: 2
+Tag: Invalid tag
+
+Line: 1 SEX F
+Level: 1
+Tag: SEX, Tag Meaning: Sex of individaul
+
+Line: 1 BIRT
+Level: 1
+Tag: BIRT, Tag Meaning: Birth date of individual
+
+Line: 2 DATE 4 JAN 1994
+Level: 2
+Tag: DATE, Tag Meaning: Date that an event occured
+
+Line: 1 FAMC @F1@
+Level: 1
+Tag: FAMC, Tag Meaning: Family where individual is a child
+
+Line: 0 @I2@ INDI
+Level: 0
+Tag: INDI, Tag Meaning: Individual record
+
+Line: 1 NAME John /Brown/
+Level: 1
+Tag: NAME, Tag Meaning: Name of individual
+
+Line: 2 GIVN John
+Level: 2
+Tag: Invalid tag
+
+Line: 2 SURN Brown
+Level: 2
+Tag: Invalid tag
+
+Line: 1 SEX M
+Level: 1
+Tag: SEX, Tag Meaning: Sex of individaul
+
+Line: 1 BIRT
+Level: 1
+Tag: BIRT, Tag Meaning: Birth date of individual
+
+Line: 2 DATE 9 JUL 1963
+Level: 2
+Tag: DATE, Tag Meaning: Date that an event occured
+
+Line: 1 FAMS @F1@
+Level: 1
+Tag: FAMS, Tag Meaning: Family where individual is a spouse
+
+Line: 1 FAMC @F2@
+Level: 1
+Tag: FAMC, Tag Meaning: Family where individual is a child
+
+Line: 0 @I3@ INDI
+Level: 0
+Tag: INDI, Tag Meaning: Individual record
+
+Line: 1 NAME Michelle /Davis/
+Level: 1
+Tag: NAME, Tag Meaning: Name of individual
+
+Line: 2 GIVN Michelle
+Level: 2
+Tag: Invalid tag
+
+Line: 2 SURN Davis
+Level: 2
+Tag: Invalid tag
+
+Line: 2 _MARNM Brown
+Level: 2
+Tag: Invalid tag
+
+Line: 1 SEX F
+Level: 1
+Tag: SEX, Tag Meaning: Sex of individaul
+
+Line: 1 BIRT
+Level: 1
+Tag: BIRT, Tag Meaning: Birth date of individual
+
+Line: 2 DATE 12 MAR 1964
+Level: 2
+Tag: DATE, Tag Meaning: Date that an event occured
+
+Line: 1 FAMS @F1@
+Level: 1
+Tag: FAMS, Tag Meaning: Family where individual is a spouse
+
+Line: 1 FAMC @F3@
+Level: 1
+Tag: FAMC, Tag Meaning: Family where individual is a child
+
+Line: 0 @I4@ INDI
+Level: 0
+Tag: INDI, Tag Meaning: Individual record
+
+Line: 1 NAME Ed /Brown/
+Level: 1
+Tag: NAME, Tag Meaning: Name of individual
+
+Line: 2 GIVN Ed
+Level: 2
+Tag: Invalid tag
+
+Line: 2 SURN Brown
+Level: 2
+Tag: Invalid tag
+
+Line: 2 _MARNM Brown
+Level: 2
+Tag: Invalid tag
+
+Line: 1 SEX M
+Level: 1
+Tag: SEX, Tag Meaning: Sex of individaul
+
+Line: 1 BIRT
+Level: 1
+Tag: BIRT, Tag Meaning: Birth date of individual
+
+Line: 2 DATE 15 NOV 1918
+Level: 2
+Tag: DATE, Tag Meaning: Date that an event occured
+
+Line: 1 FAMS @F2@
+Level: 1
+Tag: FAMS, Tag Meaning: Family where individual is a spouse
+
+Line: 0 @I5@ INDI
+Level: 0
+Tag: INDI, Tag Meaning: Individual record
+
+Line: 1 NAME Lillian /Johns/
+Level: 1
+Tag: NAME, Tag Meaning: Name of individual
+
+Line: 2 GIVN Lillian
+Level: 2
+Tag: Invalid tag
+
+Line: 2 SURN Johns
+Level: 2
+Tag: Invalid tag
+
+Line: 2 _MARNM Brown
+Level: 2
+Tag: Invalid tag
+
+Line: 1 SEX F
+Level: 1
+Tag: SEX, Tag Meaning: Sex of individaul
+
+Line: 1 BIRT
+Level: 1
+Tag: BIRT, Tag Meaning: Birth date of individual
+
+Line: 2 DATE 5 OCT 1920
+Level: 2
+Tag: DATE, Tag Meaning: Date that an event occured
+
+Line: 1 FAMS @F2@
+Level: 1
+Tag: FAMS, Tag Meaning: Family where individual is a spouse
+
+Line: 1 FAMS @F4@
+Level: 1
+Tag: FAMS, Tag Meaning: Family where individual is a spouse
+
+Line: 0 @I6@ INDI
+Level: 0
+Tag: INDI, Tag Meaning: Individual record
+
+Line: 1 NAME Thomas /Green/
+Level: 1
+Tag: NAME, Tag Meaning: Name of individual
+
+Line: 2 GIVN Thomas
+Level: 2
+Tag: Invalid tag
+
+Line: 2 SURN Green
+Level: 2
+Tag: Invalid tag
+
+Line: 2 _MARNM Green
+Level: 2
+Tag: Invalid tag
+
+Line: 1 SEX M
+Level: 1
+Tag: SEX, Tag Meaning: Sex of individaul
+
+Line: 1 BIRT
+Level: 1
+Tag: BIRT, Tag Meaning: Birth date of individual
+
+Line: 2 DATE 7 OCT 1960
+Level: 2
+Tag: DATE, Tag Meaning: Date that an event occured
+
+Line: 1 FAMC @F4@
+Level: 1
+Tag: FAMC, Tag Meaning: Family where individual is a child
+
+Line: 0 @I7@ INDI
+Level: 0
+Tag: INDI, Tag Meaning: Individual record
+
+Line: 1 NAME Justin /Green/
+Level: 1
+Tag: NAME, Tag Meaning: Name of individual
+
+Line: 2 GIVN Justin
+Level: 2
+Tag: Invalid tag
+
+Line: 2 SURN Green
+Level: 2
+Tag: Invalid tag
+
+Line: 2 _MARNM Green
+Level: 2
+Tag: Invalid tag
+
+Line: 1 SEX M
+Level: 1
+Tag: SEX, Tag Meaning: Sex of individaul
+
+Line: 1 BIRT
+Level: 1
+Tag: BIRT, Tag Meaning: Birth date of individual
+
+Line: 2 DATE 2 OCT 1925
+Level: 2
+Tag: DATE, Tag Meaning: Date that an event occured
+
+Line: 1 DEAT Y
+Level: 1
+Tag: DEAT, Tag Meaning: Date of death of individual
+
+Line: 2 DATE 29 NOV 1961
+Level: 2
+Tag: DATE, Tag Meaning: Date that an event occured
+
+Line: 1 FAMS @F4@
+Level: 1
+Tag: FAMS, Tag Meaning: Family where individual is a spouse
+
+Line: 0 @I8@ INDI
+Level: 0
+Tag: INDI, Tag Meaning: Individual record
+
+Line: 1 NAME Margaret /Green/
+Level: 1
+Tag: NAME, Tag Meaning: Name of individual
+
+Line: 2 GIVN Margaret
+Level: 2
+Tag: Invalid tag
+
+Line: 2 SURN Green
+Level: 2
+Tag: Invalid tag
+
+Line: 2 _MARNM Green
+Level: 2
+Tag: Invalid tag
+
+Line: 1 SEX F
+Level: 1
+Tag: SEX, Tag Meaning: Sex of individaul
+
+Line: 1 BIRT
+Level: 1
+Tag: BIRT, Tag Meaning: Birth date of individual
+
+Line: 2 DATE 7 OCT 1960
+Level: 2
+Tag: DATE, Tag Meaning: Date that an event occured
+
+Line: 1 FAMC @F4@
+Level: 1
+Tag: FAMC, Tag Meaning: Family where individual is a child
+
+Line: 0 @I9@ INDI
+Level: 0
+Tag: INDI, Tag Meaning: Individual record
+
+Line: 1 NAME Rick /Davis/
+Level: 1
+Tag: NAME, Tag Meaning: Name of individual
+
+Line: 2 GIVN Rick
+Level: 2
+Tag: Invalid tag
+
+Line: 2 SURN Davis
+Level: 2
+Tag: Invalid tag
+
+Line: 2 _MARNM Davis
+Level: 2
+Tag: Invalid tag
+
+Line: 1 SEX M
+Level: 1
+Tag: SEX, Tag Meaning: Sex of individaul
+
+Line: 1 BIRT
+Level: 1
+Tag: BIRT, Tag Meaning: Birth date of individual
+
+Line: 2 DATE 15 AUG 1930
+Level: 2
+Tag: DATE, Tag Meaning: Date that an event occured
+
+Line: 1 FAMS @F3@
+Level: 1
+Tag: FAMS, Tag Meaning: Family where individual is a spouse
+
+Line: 0 @I10@ INDI
+Level: 0
+Tag: INDI, Tag Meaning: Individual record
+
+Line: 1 NAME Justine /Collins/
+Level: 1
+Tag: NAME, Tag Meaning: Name of individual
+
+Line: 2 GIVN Justine
+Level: 2
+Tag: Invalid tag
+
+Line: 2 SURN Collins
+Level: 2
+Tag: Invalid tag
+
+Line: 2 _MARNM Davis
+Level: 2
+Tag: Invalid tag
+
+Line: 1 SEX F
+Level: 1
+Tag: SEX, Tag Meaning: Sex of individaul
+
+Line: 1 BIRT
+Level: 1
+Tag: BIRT, Tag Meaning: Birth date of individual
+
+Line: 2 DATE 30 JAN 1930
+Level: 2
+Tag: DATE, Tag Meaning: Date that an event occured
+
+Line: 1 FAMS @F3@
+Level: 1
+Tag: FAMS, Tag Meaning: Family where individual is a spouse
+
+Line: 0 @I11@ INDI
+Level: 0
+Tag: INDI, Tag Meaning: Individual record
+
+Line: 1 NAME Paul /Davis/
+Level: 1
+Tag: NAME, Tag Meaning: Name of individual
+
+Line: 2 GIVN Paul
+Level: 2
+Tag: Invalid tag
+
+Line: 2 SURN Davis
+Level: 2
+Tag: Invalid tag
+
+Line: 2 _MARNM Davis
+Level: 2
+Tag: Invalid tag
+
+Line: 1 SEX M
+Level: 1
+Tag: SEX, Tag Meaning: Sex of individaul
+
+Line: 1 BIRT
+Level: 1
+Tag: BIRT, Tag Meaning: Birth date of individual
+
+Line: 2 DATE 2 SEP 1966
+Level: 2
+Tag: DATE, Tag Meaning: Date that an event occured
+
+Line: 1 FAMC @F3@
+Level: 1
+Tag: FAMC, Tag Meaning: Family where individual is a child
+
+Line: 0 @I12@ INDI
+Level: 0
+Tag: INDI, Tag Meaning: Individual record
+
+Line: 1 NAME Ashley /Brown/
+Level: 1
+Tag: NAME, Tag Meaning: Name of individual
+
+Line: 2 GIVN Ashley
+Level: 2
+Tag: Invalid tag
+
+Line: 2 SURN Brown
+Level: 2
+Tag: Invalid tag
+
+Line: 2 _MARNM Brown
+Level: 2
+Tag: Invalid tag
+
+Line: 1 SEX F
+Level: 1
+Tag: SEX, Tag Meaning: Sex of individaul
+
+Line: 1 BIRT
+Level: 1
+Tag: BIRT, Tag Meaning: Birth date of individual
+
+Line: 2 DATE 19 MAY 1991
+Level: 2
+Tag: DATE, Tag Meaning: Date that an event occured
+
+Line: 1 DEAT Y
+Level: 1
+Tag: DEAT, Tag Meaning: Date of death of individual
+
+Line: 2 DATE 6 NOV 2009
+Level: 2
+Tag: DATE, Tag Meaning: Date that an event occured
+
+Line: 1 FAMC @F1@
+Level: 1
+Tag: FAMC, Tag Meaning: Family where individual is a child
+
+Line: 0 @F1@ FAM
+Level: 0
+Tag: FAM, Tag Meaning: Family record
+
+Line: 1 HUSB @I2@
+Level: 1
+Tag: HUSB, Tag Meaning: Husband in family
+
+Line: 1 WIFE @I3@
+Level: 1
+Tag: WIFE, Tag Meaning: Wife in family
+
+Line: 1 CHIL @I1@
+Level: 1
+Tag: CHIL, Tag Meaning: Child in family
+
+Line: 1 CHIL @I12@
+Level: 1
+Tag: CHIL, Tag Meaning: Child in family
+
+Line: 1 _CURRENT Y
+Level: 1
+Tag: Invalid tag
+
+Line: 0 @F2@ FAM
+Level: 0
+Tag: FAM, Tag Meaning: Family record
+
+Line: 1 HUSB @I4@
+Level: 1
+Tag: HUSB, Tag Meaning: Husband in family
+
+Line: 1 WIFE @I5@
+Level: 1
+Tag: WIFE, Tag Meaning: Wife in family
+
+Line: 1 CHIL @I2@
+Level: 1
+Tag: CHIL, Tag Meaning: Child in family
+
+Line: 1 _CURRENT Y
+Level: 1
+Tag: Invalid tag
+
+Line: 0 @F3@ FAM
+Level: 0
+Tag: FAM, Tag Meaning: Family record
+
+Line: 1 HUSB @I9@
+Level: 1
+Tag: HUSB, Tag Meaning: Husband in family
+
+Line: 1 WIFE @I10@
+Level: 1
+Tag: WIFE, Tag Meaning: Wife in family
+
+Line: 1 CHIL @I3@
+Level: 1
+Tag: CHIL, Tag Meaning: Child in family
+
+Line: 1 CHIL @I11@
+Level: 1
+Tag: CHIL, Tag Meaning: Child in family
+
+Line: 1 _CURRENT Y
+Level: 1
+Tag: Invalid tag
+
+Line: 0 @F4@ FAM
+Level: 0
+Tag: FAM, Tag Meaning: Family record
+
+Line: 1 HUSB @I7@
+Level: 1
+Tag: HUSB, Tag Meaning: Husband in family
+
+Line: 1 WIFE @I5@
+Level: 1
+Tag: WIFE, Tag Meaning: Wife in family
+
+Line: 1 CHIL @I6@
+Level: 1
+Tag: CHIL, Tag Meaning: Child in family
+
+Line: 1 CHIL @I8@
+Level: 1
+Tag: CHIL, Tag Meaning: Child in family
+
+Line: 1 _CURRENT N
+Level: 1
+Tag: Invalid tag
+
+Line: 0 TRLR
+Level: 0
+Tag: TRLR, Tag Meaning: Trailer record at end of file
+
