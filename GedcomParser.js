@@ -76,7 +76,7 @@ function getTag(line, level) {
     const tagLength = tags.length;
     let tag = "";
     if (tagLength < 2) return "";
-    if (level === "0" && !(ZEROTAGS.includes(tags[1].toLowerCase()))) { // Check if it is an exception tag
+    if (level === "0" && !(ZEROTAGS.has(tags[1].toLowerCase()))) { // Check if it is an exception tag
         if (tagLength < 3) return "";
         tag = tags[2];
     } else {
