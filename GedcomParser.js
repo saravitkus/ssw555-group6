@@ -64,6 +64,15 @@ function writeToFile(oFileName, data) {
 };
 
 /*
+Input: date: string
+Return: Date object
+Description: Converts the date string to a date object that can be compared to other date objects
+*/
+function formatDate(date) {
+    return new Date(date);
+}
+
+/*
 Input: line: string
 Return: Success: level as a string
         Failure: blank string
@@ -202,7 +211,7 @@ function ParseGedcomData(oFileName, lines) {
         else if(parsingIndividual && validTag){
             if(tag === "BIRT" || tag === "DEAT"){
                 const nextLine = trimSpace(lines[++lineIndex]);
-                const nextLevel = level + 1;
+                const nextLevel = (Number(level) + 1).toString();
                 const nextTag = getTag(nextLine, nextLevel);
                 individualDict[currentIndividual][tag] = getData(nextLine, nextLevel, nextTag);
             } else{
@@ -212,7 +221,7 @@ function ParseGedcomData(oFileName, lines) {
         else if(parsingFamily && validTag){
             if(tag === "MARR" || tag === "DIV"){
                 const nextLine = trimSpace(lines[++lineIndex]);
-                const nextLevel = level + 1;
+                const nextLevel = (Number(level) + 1).toString();;
                 const nextTag = getTag(nextLine, nextLevel);
                 familyDict[currentFamily][tag] = getData(nextLine, nextLevel, nextTag);
             } else{
