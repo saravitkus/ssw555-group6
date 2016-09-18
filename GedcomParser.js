@@ -151,6 +151,24 @@ function getData(line, level, tag) {
 }
 
 /*
+Input: id: string, attr: string
+Return: string
+Description: Looks up an attribute from an individual, given the individual id and the desired attribute
+*/
+function getIndividualAttr(id, attr) {
+    return individualDict[id][attr];
+}
+
+/*
+Input: id: string, role: string, attr: string
+Return: string
+Description: Looks up an attribute from an individual, given the family id, the role, and the desired attribute
+*/
+function getFamilyAttr(id, role, attr) {
+    return individualDict[familyDict[id][role]][attr];
+}
+
+/*
 Input: oFileName: string, lines: array of strings
 Return: none
 Description: Parse the lines one-by-one and find desired data. Then write to oFile.
@@ -258,6 +276,15 @@ function ParseGedcomFile(iFileName, oFileName) {
 const iFileName = "GEDCOM.txt";
 const oFileName = "Results.txt";
 const success = ParseGedcomFile(iFileName, oFileName);
-if (success) console.log("All done!");
-console.log(individualDict);
-console.log(familyDict);
+if (success){
+    console.log("All done!\n");
+    writeToFile(oFileName, "Individuals:\r\n");
+    for (let individualID in individualDict){
+        writeToFile(oFileName, individualID + ": " + getIndividualAttr(individualID, "NAME") + "\r\n");
+    }
+    writeToFile(oFileName, "\r\n");
+    writeToFile(oFileName, "Families:\r\n");
+    for (let familyID in familyDict){
+        writeToFile(oFileName, familyID +":\r\nHusband: " + getFamilyAttr(familyID, "HUSB", "NAME") + "\r\nWife: " + getFamilyAttr(familyID, "WIFE", "NAME") + "\r\n");
+    }
+}

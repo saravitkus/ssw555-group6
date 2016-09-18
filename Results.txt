@@ -550,3 +550,30 @@ Line: 0 TRLR
 Level: 0
 Tag: TRLR, Tag Meaning: Trailer record at end of file
 
+Individuals:
+@I1@: Susan /Brown/
+@I2@: John /Brown/
+@I3@: Michelle /Davis/
+@I4@: Ed /Brown/
+@I5@: Lillian /Johns/
+@I6@: Thomas /Green/
+@I7@: Justin /Green/
+@I8@: Margaret /Green/
+@I9@: Rick /Davis/
+@I10@: Justine /Collins/
+@I11@: Paul /Davis/
+@I12@: Ashley /Brown/
+
+Families:
+@F1@:
+Husband: John /Brown/
+Wife: Michelle /Davis/
+@F2@:
+Husband: Ed /Brown/
+Wife: Lillian /Johns/
+@F3@:
+Husband: Rick /Davis/
+Wife: Justine /Collins/
+@F4@:
+Husband: Justin /Green/
+Wife: Lillian /Johns/
