@@ -2,6 +2,10 @@ Line: 0 NOTE Alex Sabella, Dillon Uzar, Sara Vitkus
 Level: 0
 Tag: NOTE, Tag Meaning: Comments, may be used to describe tests
 
+Line: 0 NOTE GitHub: ssw555-group6
+Level: 0
+Tag: NOTE, Tag Meaning: Comments, may be used to describe tests
+
 Line: 0 HEAD
 Level: 0
 Tag: HEAD, Tag Meaning: Header record at beginning of file

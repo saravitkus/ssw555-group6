@@ -1,4 +1,5 @@
 0 NOTE Alex Sabella, Dillon Uzar, Sara Vitkus
+0 NOTE GitHub: ssw555-group6
 0 HEAD
 1 SOUR Family Echo
 2 WWW http://www.familyecho.com/
