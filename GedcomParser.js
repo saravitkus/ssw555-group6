@@ -9,8 +9,14 @@ GEDCOM Parser
 // Import node.js file system
 const fs = require('fs');
 
+// Current Date Object
+const NOW = new Date();
+
 // List of tags with level 0 that are formatted like the rest of tags
 const ZEROTAGS = new Set(["HEAD", "TRLR", "NOTE"]);
+
+// List of tags with dates on the sequential line
+const DATETAGS = new Set(["BIRT", "DEAT", "MARR", "DIV"]);
 
 // Dictionary lookup for tags and their meanings
 const VALIDTAGDICTS = { "0":   {
@@ -38,11 +44,11 @@ const VALIDTAGDICTS = { "0":   {
                                 }
 };
 
-// Dictionary of individuals
-let individualDict = {};
-
-// Dictionary of families
-let familyDict = {};
+// Dictionaty of entities
+let entityDict = {
+                    "INDI": {},
+                    "FAM":  {}
+};
 
 /*
 Input: str: string
@@ -168,6 +174,8 @@ function getFamilyAttr(id, role, attr) {
     return individualDict[familyDict[id][role]][attr];
 }
 
+
+
 /*
 Input: oFileName: string, lines: array of strings
 Return: none
@@ -184,10 +192,7 @@ function ParseGedcomData(oFileName, lines) {
     let tagMeaning = "";
     let validTag = false;
     let fileLength = lines.length;
-    let parsingIndividual = false;
-    let parsingFamily = false;
-    let currentIndividual = "";
-    let currentFamily = "";
+    let currentEntity = null;
     
 
     for (let lineIndex = 0; lineIndex < fileLength; ++lineIndex) {
@@ -203,10 +208,7 @@ function ParseGedcomData(oFileName, lines) {
         if (level === "") {
             writeToFile(oFileName, "Level: CANNOT FIND LEVEL\r\n");
         } writeToFile(oFileName, "Level: " + level + "\r\n");
-        if (level === "0"){
-            parsingIndividual = false;
-            parsingFamily = false;
-        }
+        if (level === "0") currentEntity = null;
 
         // Find and write tag and meaning
         tag = getTag(line, level);
@@ -214,37 +216,20 @@ function ParseGedcomData(oFileName, lines) {
         if (validTag) {
             tagMeaning = getTagMeaning(tag, level);
             writeToFile(oFileName, "Tag: " + tag + ", Tag Meaning: " + tagMeaning + "\r\n");
-        } else writeToFile(oFileName, "Tag: Invalid tag\r\n");
+        } else {
+            writeToFile(oFileName, "Tag: Invalid tag\r\n\r\n");
+            continue;
+        }
 
-        if(tag === "INDI" && validTag){
-            parsingIndividual = true;
-            currentIndividual = getID(line);
-            individualDict[currentIndividual] = {};
-        }
-        else if(tag === "FAM" && validTag){
-            parsingFamily = true;
-            currentFamily = getID(line);
-            familyDict[currentFamily] = {};
-        }
-        else if(parsingIndividual && validTag){
-            if(tag === "BIRT" || tag === "DEAT"){
-                const nextLine = trimSpace(lines[++lineIndex]);
-                const nextLevel = (Number(level) + 1).toString();
-                const nextTag = getTag(nextLine, nextLevel);
-                individualDict[currentIndividual][tag] = getData(nextLine, nextLevel, nextTag);
-            } else{
-                individualDict[currentIndividual][tag] = getData(line, level, tag);
-            }
-        }
-        else if(parsingFamily && validTag){
-            if(tag === "MARR" || tag === "DIV"){
-                const nextLine = trimSpace(lines[++lineIndex]);
-                const nextLevel = (Number(level) + 1).toString();;
-                const nextTag = getTag(nextLine, nextLevel);
-                familyDict[currentFamily][tag] = getData(nextLine, nextLevel, nextTag);
-            } else{
-                familyDict[currentFamily][tag] = getData(line, level, tag);
-            }
+        if(tag in entityDicts) {
+            currentEntity = entityDict[tag][getID(line)] = {};
+        } else if(DATETAGS.has(tag)) {
+            const nextLine = trimSpace(lines[++lineIndex]);
+            const nextLevel = (Number(level) + 1).toString();
+            const nextTag = getTag(nextLine, nextLevel);
+            currentEntity[tag] = getData(nextLine, nextLevel, nextTag);
+        } else {
+            currentEntity[tag] = getData(line, level, tag);
         }
 
         writeToFile(oFileName,"\r\n"); // Newline to separate each line's data
