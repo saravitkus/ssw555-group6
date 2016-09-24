@@ -572,12 +572,17 @@ Families:
 @F1@:
 Husband: John /Brown/
 Wife: Michelle /Davis/
+
 @F2@:
 Husband: Ed /Brown/
 Wife: Lillian /Johns/
+
 @F3@:
 Husband: Rick /Davis/
 Wife: Justine /Collins/
+
 @F4@:
 Husband: Justin /Green/
 Wife: Lillian /Johns/
+
+There were 0 errors in this Gedcom file!

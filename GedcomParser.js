@@ -67,7 +67,7 @@ Description: Appends data to oFileName
 function writeToFile(oFileName, data) {
     fs.appendFileSync(oFileName, data);
     console.log(data.slice(0, -2) + " > " + oFileName); // Remove newline for outputting to console
-};
+}
 
 /*
 Input: date: string
@@ -76,6 +76,28 @@ Description: Converts the date string to a date object that can be compared to o
 */
 function formatDate(date) {
     return new Date(date);
+}
+
+/*
+Input: firstDate, secondDate: string
+Return: Integer
+Description: Returns the number of years between two Date objects
+*/
+function getDiffInYears(firstDate, secondDate) {
+    let years = secondDate.getFullYear() - firstDate.getFullYear();
+    firstDate.setFullYear(secondDate.getFullYear());
+    if (firstDate > secondDate) --years;
+    return years;
+}
+
+/*
+Input: firstDate, secondDate: string
+Return: Integer
+Description: Returns the number of days between two Date objects
+*/
+function getDiffInDays(firstDate, secondDate) {
+    let days = Math.round((secondDate - firstDate)/86400000); //1000*60*60*24;
+    return days;
 }
 
 /*
@@ -118,9 +140,7 @@ Return: True if tag is valid
 Description: Checks if the tag is valid, given the level
 */
 function isTagValid(tag, level) {
-    if (tag === "") return false;
-    if (tag in VALIDTAGDICTS[level]) return true;
-    return false;
+    return (tag in VALIDTAGDICTS[level]);
 }
 
 /*
@@ -130,8 +150,7 @@ Return: Success: tag meaning as a string
 Description: Does a dictionary lookup for the tag to find its meaning
 */
 function getTagMeaning(tag, level) {
-    if (!(tag in VALIDTAGDICTS[level])) return "";
-    return VALIDTAGDICTS[level][tag];
+    return VALIDTAGDICTS[level][tag] || "";
 }
 
 /*
@@ -162,7 +181,7 @@ Return: string
 Description: Looks up an attribute from an individual, given the individual id and the desired attribute
 */
 function getIndividualAttr(id, attr) {
-    return individualDict[id][attr];
+    return entityDict.INDI[id][attr];
 }
 
 /*
@@ -171,10 +190,25 @@ Return: string
 Description: Looks up an attribute from an individual, given the family id, the role, and the desired attribute
 */
 function getFamilyAttr(id, role, attr) {
-    return individualDict[familyDict[id][role]][attr];
+    return entityDict.INDI[entityDict.FAM[id][role]][attr];
 }
 
-
+/*
+Input: none
+Return: none
+Description: Prints out all individuals and families
+*/
+function printEntities(oFileName) {
+    writeToFile(oFileName, "Individuals:\r\n");
+    for (let individualID in entityDict.INDI){
+        writeToFile(oFileName, individualID + ": " + getIndividualAttr(individualID, "NAME") + "\r\n");
+    }
+    writeToFile(oFileName, "\r\n");
+    writeToFile(oFileName, "Families:\r\n");
+    for (let familyID in entityDict.FAM){
+        writeToFile(oFileName, familyID +":\r\nHusband: " + getFamilyAttr(familyID, "HUSB", "NAME") + "\r\nWife: " + getFamilyAttr(familyID, "WIFE", "NAME") + "\r\n\r\n");
+    }
+}
 
 /*
 Input: oFileName: string, lines: array of strings
@@ -221,20 +255,59 @@ function ParseGedcomData(oFileName, lines) {
             continue;
         }
 
-        if(tag in entityDicts) {
+        if(tag in entityDict) {
             currentEntity = entityDict[tag][getID(line)] = {};
-        } else if(DATETAGS.has(tag)) {
-            const nextLine = trimSpace(lines[++lineIndex]);
-            const nextLevel = (Number(level) + 1).toString();
-            const nextTag = getTag(nextLine, nextLevel);
-            currentEntity[tag] = getData(nextLine, nextLevel, nextTag);
-        } else {
-            currentEntity[tag] = getData(line, level, tag);
+        } else if(currentEntity) {
+            if(DATETAGS.has(tag)) {
+                const nextLine = trimSpace(lines[++lineIndex]);
+                const nextLevel = (Number(level) + 1).toString();
+                const nextTag = getTag(nextLine, nextLevel);
+                currentEntity[tag] = formatDate(getData(nextLine, nextLevel, nextTag));
+            } else {
+                currentEntity[tag] = getData(line, level, tag);
+            }
         }
 
         writeToFile(oFileName,"\r\n"); // Newline to separate each line's data
     }
 }
+
+// Validity Checks
+//////////////////////////////////////////////////////
+
+/*
+Input: none
+Return: none
+Description: Calculates ages for all individuals and adds it to an "AGE" field
+*/
+function getAges(oFileName) {
+    console.log("Calculating ages...")
+    for (const individualID in entityDict.INDI) {
+        const currentEntity = entityDict.INDI[individualID];
+        currentEntity.AGE = getDiffInYears(currentEntity.BIRT, currentEntity.DEAT || NOW);
+    }
+    console.log("Done calculating ages!\r\n");
+}
+
+/*
+Input: none
+Return: integer
+Description: Checks all individuals for an age greater than 150 years old. Returns a count of the frequency of this occurence
+*/
+function lessThan150Years(oFileName) {
+    console.log("Checking for individuals over the age of 150 years old...");
+    let errorCnt = 0;
+    for (const individualID in entityDict.INDI) {
+        const currentEntity = entityDict.INDI[individualID];
+        if(currentEntity.AGE >= 150) {
+            writeToFile(oFileName, individualID + ": Over 150 years old!");
+            ++errorCnt;
+        }
+    }
+    return errorCnt;
+}
+
+//////////////////////////////////////////////////////
 
 /*
 Input: iFileName: string, oFileName: string
@@ -244,9 +317,10 @@ Description: Loads iFileName into lines by splitting at newline and sets up pars
 */
 function ParseGedcomFile(iFileName, oFileName) {
     console.log("Parsing Gedcom File...");
-
+    let errorCnt = 0;
+    let data;
     try {
-        var data = fs.readFileSync(iFileName, {encoding:'utf8'});
+        data = fs.readFileSync(iFileName, {encoding:'utf8'});
     }
     catch(e) {
         console.log("Error opening file! Make sure file exists and file name is correct");
@@ -254,22 +328,25 @@ function ParseGedcomFile(iFileName, oFileName) {
     }
     const lines = data.split("\n"); //make an array of lines to pull data from
     ParseGedcomData(oFileName, lines);
+
+    // Validity Checks
+    getAges(oFileName);
+    errorCnt += lessThan150Years(oFileName);
+    //
+
+    printEntities(oFileName);
+
+    writeToFile(oFileName, "There were " + errorCnt + " errors in this Gedcom file!\r\n");
+    if (errorCnt > 0) writeToFile(oFileName, "Check above for details on these errors!");
+
     return true;
 }
 
 // Main function to set up file to be parsed and where to put the data
 const iFileName = "GEDCOM.txt";
 const oFileName = "Results.txt";
+
 const success = ParseGedcomFile(iFileName, oFileName);
 if (success){
-    console.log("All done!\n");
-    writeToFile(oFileName, "Individuals:\r\n");
-    for (let individualID in individualDict){
-        writeToFile(oFileName, individualID + ": " + getIndividualAttr(individualID, "NAME") + "\r\n");
-    }
-    writeToFile(oFileName, "\r\n");
-    writeToFile(oFileName, "Families:\r\n");
-    for (let familyID in familyDict){
-        writeToFile(oFileName, familyID +":\r\nHusband: " + getFamilyAttr(familyID, "HUSB", "NAME") + "\r\nWife: " + getFamilyAttr(familyID, "WIFE", "NAME") + "\r\n");
-    }
+    console.log("All done!\r\n");
 }
