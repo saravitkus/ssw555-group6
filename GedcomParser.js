@@ -6,8 +6,9 @@ GEDCOM Parser
 
 "use strict";
 
-// Import node.js file system
-const fs = require('fs');
+// Imports:
+const fs = require('fs'); // File system
+require('console.table'); // Adds console.table()
 
 // Current Date Object
 const NOW = new Date();
@@ -200,6 +201,7 @@ Return: none
 Description: Prints out all individuals and families
 */
 function printEntities(oFileName) {
+    // TODO: console.table() will print a table
     writeToFile(oFileName, "Individuals:\r\n");
     for (let individualID in entityDict.INDI){
         writeToFile(oFileName, individualID + ": " + getIndividualAttr(individualID, "NAME") + "\r\n");
@@ -228,7 +230,7 @@ function ParseGedcomData(oFileName, lines) {
     let validTag = false;
     let fileLength = lines.length;
     let currentEntity = null;
-    
+
 
     for (let lineIndex = 0; lineIndex < fileLength; ++lineIndex) {
 
