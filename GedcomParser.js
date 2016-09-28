@@ -85,6 +85,7 @@ Description: Returns the number of years between two Date objects
 */
 function getDiffInYears(firstDate, secondDate) {
     let years = secondDate.getFullYear() - firstDate.getFullYear();
+    firstDate = new Date(firstDate); // Clones object so that it doesn't overwrite it
     firstDate.setFullYear(secondDate.getFullYear());
     if (firstDate > secondDate) --years;
     return years;
@@ -336,11 +337,9 @@ function listRecentBirths(oFileName) {
     writeToFile(oFileName, "Recent Births: \r\n");
      for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
-        if (currentEntity.AGE === 0){
-            let birthAgeDays = getDiffInDays(currentEntity.BIRT, NOW);
-            if (birthAgeDays < 30){
-                writeToFile(oFileName, individualID + "\r\n");
-            }
+        let birthAgeDays = getDiffInDays(currentEntity.BIRT, NOW);
+        if (birthAgeDays < 30){
+            writeToFile(oFileName, individualID + "\r\n");
         }
     }
 }
