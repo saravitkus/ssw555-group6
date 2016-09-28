@@ -300,11 +300,31 @@ function lessThan150Years(oFileName) {
     for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
         if(currentEntity.AGE >= 150) {
-            writeToFile(oFileName, individualID + ": Over 150 years old!");
+            writeToFile(oFileName, individualID + ": Over 150 years old!\r\n");
             ++errorCnt;
         }
     }
     return errorCnt;
+}
+
+//////////////////////////////////////////////////////
+
+// Lists Generated
+//////////////////////////////////////////////////////
+
+/*
+Input: oFileName: string
+Return: none
+Description: Outputs all deceased family members to the file
+*/
+function listDeceased(oFileName) {
+    writeToFile(oFileName, "Deceased Family Members: \r\n");
+     for (const individualID in entityDict.INDI) {
+        const currentEntity = entityDict.INDI[individualID];
+        if (currentEntity.DEAT != undefined){
+            writeToFile(oFileName, individualID + "\r\n");
+        }
+    }
 }
 
 //////////////////////////////////////////////////////
@@ -329,15 +349,21 @@ function ParseGedcomFile(iFileName, oFileName) {
     const lines = data.split("\n"); //make an array of lines to pull data from
     ParseGedcomData(oFileName, lines);
 
+    printEntities(oFileName);
+
+    writeToFile(oFileName, "Errors: \r\n");
     // Validity Checks
     getAges(oFileName);
     errorCnt += lessThan150Years(oFileName);
     //
 
-    printEntities(oFileName);
-
     writeToFile(oFileName, "There were " + errorCnt + " errors in this Gedcom file!\r\n");
     if (errorCnt > 0) writeToFile(oFileName, "Check above for details on these errors!");
+
+    writeToFile(oFileName, "\r\n\r\nLists: \r\n");
+    // Lists Generated
+    listDeceased(oFileName);
+    //
 
     return true;
 }

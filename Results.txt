@@ -2,10 +2,6 @@ Line: 0 NOTE Alex Sabella, Dillon Uzar, Sara Vitkus
 Level: 0
 Tag: NOTE, Tag Meaning: Comments, may be used to describe tests
 
-Line: 0 NOTE GitHub: ssw555-group6
-Level: 0
-Tag: NOTE, Tag Meaning: Comments, may be used to describe tests
-
 Line: 0 HEAD
 Level: 0
 Tag: HEAD, Tag Meaning: Header record at beginning of file
@@ -18,11 +14,11 @@ Line: 2 WWW http://www.familyecho.com/
 Level: 2
 Tag: Invalid tag
 
-Line: 1 FILE My Family
+Line: 1 FILE Family 2
 Level: 1
 Tag: Invalid tag
 
-Line: 1 DATE 6 SEP 2016
+Line: 1 DATE 28 SEP 2016
 Level: 1
 Tag: Invalid tag
 
@@ -85,6 +81,10 @@ Tag: SEX, Tag Meaning: Sex of individaul
 Line: 1 BIRT
 Level: 1
 Tag: BIRT, Tag Meaning: Birth date of individual
+
+Line: 1 FAMS @F5@
+Level: 1
+Tag: FAMS, Tag Meaning: Family where individual is a spouse
 
 Line: 1 FAMC @F1@
 Level: 1
@@ -458,6 +458,102 @@ Line: 1 FAMC @F1@
 Level: 1
 Tag: FAMC, Tag Meaning: Family where individual is a child
 
+Line: 0 @I13@ INDI
+Level: 0
+Tag: INDI, Tag Meaning: Individual record
+
+Line: 1 NAME Bob /Brown/
+Level: 1
+Tag: NAME, Tag Meaning: Name of individual
+
+Line: 2 GIVN Bob
+Level: 2
+Tag: Invalid tag
+
+Line: 2 SURN Brown
+Level: 2
+Tag: Invalid tag
+
+Line: 2 _MARNM Brown
+Level: 2
+Tag: Invalid tag
+
+Line: 1 SEX M
+Level: 1
+Tag: SEX, Tag Meaning: Sex of individaul
+
+Line: 1 BIRT
+Level: 1
+Tag: BIRT, Tag Meaning: Birth date of individual
+
+Line: 1 FAMC @F5@
+Level: 1
+Tag: FAMC, Tag Meaning: Family where individual is a child
+
+Line: 0 @I14@ INDI
+Level: 0
+Tag: INDI, Tag Meaning: Individual record
+
+Line: 1 NAME Mark /Marris/
+Level: 1
+Tag: NAME, Tag Meaning: Name of individual
+
+Line: 2 GIVN Mark
+Level: 2
+Tag: Invalid tag
+
+Line: 2 SURN Marris
+Level: 2
+Tag: Invalid tag
+
+Line: 2 _MARNM Marris
+Level: 2
+Tag: Invalid tag
+
+Line: 1 SEX F
+Level: 1
+Tag: SEX, Tag Meaning: Sex of individaul
+
+Line: 1 BIRT
+Level: 1
+Tag: BIRT, Tag Meaning: Birth date of individual
+
+Line: 1 FAMS @F5@
+Level: 1
+Tag: FAMS, Tag Meaning: Family where individual is a spouse
+
+Line: 0 @I15@ INDI
+Level: 0
+Tag: INDI, Tag Meaning: Individual record
+
+Line: 1 NAME Mary /Brown/
+Level: 1
+Tag: NAME, Tag Meaning: Name of individual
+
+Line: 2 GIVN Mary
+Level: 2
+Tag: Invalid tag
+
+Line: 2 SURN Brown
+Level: 2
+Tag: Invalid tag
+
+Line: 2 _MARNM Brown
+Level: 2
+Tag: Invalid tag
+
+Line: 1 SEX F
+Level: 1
+Tag: SEX, Tag Meaning: Sex of individaul
+
+Line: 1 BIRT
+Level: 1
+Tag: BIRT, Tag Meaning: Birth date of individual
+
+Line: 1 FAMC @F5@
+Level: 1
+Tag: FAMC, Tag Meaning: Family where individual is a child
+
 Line: 0 @F1@ FAM
 Level: 0
 Tag: FAM, Tag Meaning: Family record
@@ -502,30 +598,6 @@ Line: 1 _CURRENT Y
 Level: 1
 Tag: Invalid tag
 
-Line: 0 @F3@ FAM
-Level: 0
-Tag: FAM, Tag Meaning: Family record
-
-Line: 1 HUSB @I9@
-Level: 1
-Tag: HUSB, Tag Meaning: Husband in family
-
-Line: 1 WIFE @I10@
-Level: 1
-Tag: WIFE, Tag Meaning: Wife in family
-
-Line: 1 CHIL @I3@
-Level: 1
-Tag: CHIL, Tag Meaning: Child in family
-
-Line: 1 CHIL @I11@
-Level: 1
-Tag: CHIL, Tag Meaning: Child in family
-
-Line: 1 _CURRENT Y
-Level: 1
-Tag: Invalid tag
-
 Line: 0 @F4@ FAM
 Level: 0
 Tag: FAM, Tag Meaning: Family record
@@ -550,6 +622,66 @@ Line: 1 _CURRENT N
 Level: 1
 Tag: Invalid tag
 
+Line: 0 @F3@ FAM
+Level: 0
+Tag: FAM, Tag Meaning: Family record
+
+Line: 1 HUSB @I9@
+Level: 1
+Tag: HUSB, Tag Meaning: Husband in family
+
+Line: 1 WIFE @I10@
+Level: 1
+Tag: WIFE, Tag Meaning: Wife in family
+
+Line: 1 CHIL @I3@
+Level: 1
+Tag: CHIL, Tag Meaning: Child in family
+
+Line: 1 CHIL @I11@
+Level: 1
+Tag: CHIL, Tag Meaning: Child in family
+
+Line: 1 _CURRENT Y
+Level: 1
+Tag: Invalid tag
+
+Line: 0 @F5@ FAM
+Level: 0
+Tag: FAM, Tag Meaning: Family record
+
+Line: 1 HUSB @I14@
+Level: 1
+Tag: HUSB, Tag Meaning: Husband in family
+
+Line: 1 WIFE @I1@
+Level: 1
+Tag: WIFE, Tag Meaning: Wife in family
+
+Line: 1 CHIL @I13@
+Level: 1
+Tag: CHIL, Tag Meaning: Child in family
+
+Line: 1 CHIL @I15@
+Level: 1
+Tag: CHIL, Tag Meaning: Child in family
+
+Line: 1 MARR
+Level: 1
+Tag: MARR, Tag Meaning: Marriage event for family
+
+Line: 1 EVEN
+Level: 1
+Tag: Invalid tag
+
+Line: 2 TYPE Ending
+Level: 2
+Tag: Invalid tag
+
+Line: 1 _CURRENT N
+Level: 1
+Tag: Invalid tag
+
 Line: 0 TRLR
 Level: 0
 Tag: TRLR, Tag Meaning: Trailer record at end of file
@@ -567,6 +699,9 @@ Individuals:
 @I10@: Justine /Collins/
 @I11@: Paul /Davis/
 @I12@: Ashley /Brown/
+@I13@: Bob /Brown/
+@I14@: Mark /Marris/
+@I15@: Mary /Brown/
 
 Families:
 @F1@:
@@ -577,12 +712,25 @@ Wife: Michelle /Davis/
 Husband: Ed /Brown/
 Wife: Lillian /Johns/
 
-@F3@:
-Husband: Rick /Davis/
-Wife: Justine /Collins/
-
 @F4@:
 Husband: Justin /Green/
 Wife: Lillian /Johns/
 
-There were 0 errors in this Gedcom file!
+@F3@:
+Husband: Rick /Davis/
+Wife: Justine /Collins/
+
+@F5@:
+Husband: Mark /Marris/
+Wife: Susan /Brown/
+
+Errors: 
+@I7@: Over 150 years old!
+@I14@: Over 150 years old!
+There were 2 errors in this Gedcom file!
+Check above for details on these errors!
+
+Lists: 
+Deceased Family Members: 
+@I7@
+@I12@
