@@ -96,7 +96,7 @@ Return: Integer
 Description: Returns the number of days between two Date objects
 */
 function getDiffInDays(firstDate, secondDate) {
-    let days = Math.round((secondDate - firstDate)/86400000); //1000*60*60*24;
+    let days = Math.round((secondDate.getTime() - firstDate.getTime())/86400000); //1000*60*60*24;
     return days;
 }
 
@@ -327,6 +327,24 @@ function listDeceased(oFileName) {
     }
 }
 
+/*
+Input: oFileName: string
+Return: none
+Description: Outputs all family members born in the last 30 days to the file
+*/
+function listRecentBirths(oFileName) {
+    writeToFile(oFileName, "Recent Births: \r\n");
+     for (const individualID in entityDict.INDI) {
+        const currentEntity = entityDict.INDI[individualID];
+        if (currentEntity.AGE === 0){
+            let birthAgeDays = getDiffInDays(currentEntity.BIRT, NOW);
+            if (birthAgeDays < 30){
+                writeToFile(oFileName, individualID + "\r\n");
+            }
+        }
+    }
+}
+
 //////////////////////////////////////////////////////
 
 /*
@@ -363,6 +381,7 @@ function ParseGedcomFile(iFileName, oFileName) {
     writeToFile(oFileName, "\r\n\r\nLists: \r\n");
     // Lists Generated
     listDeceased(oFileName);
+    listRecentBirths(oFileName);
     //
 
     return true;
