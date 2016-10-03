@@ -720,7 +720,9 @@ ID    HUSB   WIFE   CHIL   MARR
 Errors:
 @I7@: Over 150 years old!
 @I14@: Over 150 years old!
-There were 2 errors in this Gedcom file!
+@F5@: MARR is after NOW!
+@F5@: HUSB is not of gender 'M'!
+There were 4 errors in this Gedcom file!
 Check above for details on these errors!
 
 

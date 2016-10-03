@@ -318,6 +318,75 @@ function lessThan150Years(oFileName) {
     return errorCnt;
 }
 
+/*
+Input: none
+Return: integer
+Description: Checks all dates on individuals and families to make sure they are not newer than NOW. Returns a count of the frequency of this occurence
+*/
+function checkDatesAfterNOW() {
+    console.debug("Checking for dates after NOW...");
+    let errorCnt = 0;
+
+    // Check each individual:
+    for (const individualID in entityDict.INDI) {
+        const currentEntity = entityDict.INDI[individualID];
+        DATETAGS.forEach((tag) => {
+            // Check if this tag on the entity is greater than NOW:
+            if (currentEntity[tag] && currentEntity[tag] > NOW) {
+                console.log(individualID + ": " + tag + " is after NOW!");
+                ++errorCnt;
+            }
+        });
+    }
+
+    // Check each family:
+    for (const familyID in entityDict.FAM) {
+        const currentEntity = entityDict.FAM[familyID];
+        DATETAGS.forEach((tag) => {
+            // Check if this tag on the entity is greater than NOW:
+            if (currentEntity[tag] && currentEntity[tag] > NOW) {
+                console.log(familyID + ": " + tag + " is after NOW!");
+                ++errorCnt;
+            }
+        });
+    }
+
+    return errorCnt;
+}
+
+/*
+Input: none
+Return: integer
+Description: Checks all families a verifies each spouse's role matches their gender. Returns a count of the frequency of this occurence
+*/
+function checkGenderAndRole() {
+    console.debug("Checking for genders that don't match their spousal role...");
+    let errorCnt = 0;
+
+    // Check each family:
+    for (const familyID in entityDict.FAM) {
+        const family = entityDict.FAM[familyID];
+        // Check to make sure HUSB is of gender 'M':
+        if (family.HUSB) {
+            const HUSB = entityDict.INDI[family.HUSB];
+            if (HUSB && HUSB.SEX !== "M") {
+                console.log(familyID + ": HUSB is not of gender 'M'!");
+                ++errorCnt;
+            }
+        }
+        // Check to make sure WIFE is of gender 'F':
+        if (family.WIFE) {
+            const WIFE = entityDict.INDI[family.WIFE];
+            if (WIFE && WIFE.SEX !== "F") {
+                console.log(familyID + ": WIFE is not of gender 'F'!");
+                ++errorCnt;
+            }
+        }
+    }
+
+    return errorCnt;
+}
+
 //////////////////////////////////////////////////////
 
 // Lists Generated
@@ -381,6 +450,8 @@ function ParseGedcomFile(iFileName, oFileName) {
     // Validity Checks
     getAges(oFileName);
     errorCnt += lessThan150Years(oFileName);
+    errorCnt += checkDatesAfterNOW();
+    errorCnt += checkGenderAndRole();
     //
 
     console.log("There were " + errorCnt + " errors in this Gedcom file!");
