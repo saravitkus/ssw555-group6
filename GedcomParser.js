@@ -8,7 +8,21 @@ GEDCOM Parser
 
 // Imports:
 const fs = require('fs'); // File system
+const util = require('util');
 require('console.table'); // Adds console.table()
+
+// Setup console.debug:
+(() => {
+    let logFile = fs.createWriteStream('results.txt', { flags: 'w' });
+    let logStdout = process.stdout;
+    console.debug = console.log; // debug doesn't log to file!
+    console.log = function () {
+        // Logs to the file as well:
+        logFile.write(util.format.apply(null, arguments) + '\r\n');
+        //logStdout.write(util.format.apply(null, arguments) + '\r\n');
+        console.debug.apply(console, arguments);
+    };
+})();
 
 // Current Date Object
 const NOW = new Date();
@@ -58,16 +72,6 @@ Description: Removes whitespace from beginning and end of string
 */
 function trimSpace(str) {
     return str.replace(/^\s+|\s+$/g,"");
-}
-
-/*
-Input: oFileName: string, data: string
-Return: none
-Description: Appends data to oFileName
-*/
-function writeToFile(oFileName, data) {
-    fs.appendFileSync(oFileName, data);
-    console.log(data.slice(0, -2) + " > " + oFileName); // Remove newline for outputting to console
 }
 
 /*
@@ -202,15 +206,18 @@ Description: Prints out all individuals and families
 */
 function printEntities(oFileName) {
     // TODO: console.table() will print a table
-    writeToFile(oFileName, "Individuals:\r\n");
+    console.log("");
+    console.table("Individuals:", Object.keys(entityDict.INDI).map((key) => { return entityDict.INDI[key]; }));
+    console.table("Families:", Object.keys(entityDict.FAM).map((key) => { return entityDict.FAM[key]; }));
+    /*console.log("Individuals:\r\n");
     for (let individualID in entityDict.INDI){
-        writeToFile(oFileName, individualID + ": " + getIndividualAttr(individualID, "NAME") + "\r\n");
+        console.log(individualID + ": " + getIndividualAttr(individualID, "NAME"));
     }
-    writeToFile(oFileName, "\r\n");
-    writeToFile(oFileName, "Families:\r\n");
+    console.log("\r\n");
+    console.log("Families:\r\n");
     for (let familyID in entityDict.FAM){
-        writeToFile(oFileName, familyID +":\r\nHusband: " + getFamilyAttr(familyID, "HUSB", "NAME") + "\r\nWife: " + getFamilyAttr(familyID, "WIFE", "NAME") + "\r\n\r\n");
-    }
+        console.log(familyID +":\r\nHusband: " + getFamilyAttr(familyID, "HUSB", "NAME") + "\r\nWife: " + getFamilyAttr(familyID, "WIFE", "NAME") + "\r\n\r\n");
+    }*/
 }
 
 /*
@@ -219,7 +226,7 @@ Return: none
 Description: Parse the lines one-by-one and find desired data. Then write to oFile.
 */
 function ParseGedcomData(oFileName, lines) {
-    console.log("Parsing Gedcom Data...");
+    console.debug("Parsing Gedcom Data...");
 
     fs.writeFileSync(oFileName, ""); // If the result file already exists, erase all data in it
 
@@ -238,13 +245,12 @@ function ParseGedcomData(oFileName, lines) {
 
         // Write whole line
         if (line === "") continue;
-        writeToFile(oFileName, "Line: " + line + "\r\n");
+        console.log("Line: " + line);
 
         // Find and write level
         level = getLevel(line);
-        if (level === "") {
-            writeToFile(oFileName, "Level: CANNOT FIND LEVEL\r\n");
-        } writeToFile(oFileName, "Level: " + level + "\r\n");
+        if (level === "") console.log("Level: CANNOT FIND LEVEL");
+        console.log("Level: " + level);
         if (level === "0") currentEntity = null;
 
         // Find and write tag and meaning
@@ -252,14 +258,16 @@ function ParseGedcomData(oFileName, lines) {
         validTag = isTagValid(tag, level);
         if (validTag) {
             tagMeaning = getTagMeaning(tag, level);
-            writeToFile(oFileName, "Tag: " + tag + ", Tag Meaning: " + tagMeaning + "\r\n");
+            console.log("Tag: " + tag + ", Tag Meaning: " + tagMeaning);
         } else {
-            writeToFile(oFileName, "Tag: Invalid tag\r\n\r\n");
+            console.log("Tag: Invalid tag");
+            console.log("");
             continue;
         }
 
-        if(tag in entityDict) {
-            currentEntity = entityDict[tag][getID(line)] = {};
+        if (tag in entityDict) {
+            const id = getID(line);
+            currentEntity = entityDict[tag][id] = { ID: id };
         } else if(currentEntity) {
             if(DATETAGS.has(tag)) {
                 const nextLine = trimSpace(lines[++lineIndex]);
@@ -271,7 +279,7 @@ function ParseGedcomData(oFileName, lines) {
             }
         }
 
-        writeToFile(oFileName,"\r\n"); // Newline to separate each line's data
+        console.log(""); // Newline to separate each line's data
     }
 }
 
@@ -284,12 +292,12 @@ Return: none
 Description: Calculates ages for all individuals and adds it to an "AGE" field
 */
 function getAges(oFileName) {
-    console.log("Calculating ages...")
+    console.debug("Calculating ages...")
     for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
         currentEntity.AGE = getDiffInYears(currentEntity.BIRT, currentEntity.DEAT || NOW);
     }
-    console.log("Done calculating ages!\r\n");
+    console.debug("Done calculating ages!");
 }
 
 /*
@@ -298,12 +306,12 @@ Return: integer
 Description: Checks all individuals for an age greater than 150 years old. Returns a count of the frequency of this occurence
 */
 function lessThan150Years(oFileName) {
-    console.log("Checking for individuals over the age of 150 years old...");
+    console.debug("Checking for individuals over the age of 150 years old...");
     let errorCnt = 0;
     for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
         if(currentEntity.AGE >= 150) {
-            writeToFile(oFileName, individualID + ": Over 150 years old!\r\n");
+            console.log(individualID + ": Over 150 years old!");
             ++errorCnt;
         }
     }
@@ -321,11 +329,11 @@ Return: none
 Description: Outputs all deceased family members to the file
 */
 function listDeceased(oFileName) {
-    writeToFile(oFileName, "Deceased Family Members: \r\n");
+    console.log("Deceased Family Members:");
      for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
         if (currentEntity.DEAT != undefined){
-            writeToFile(oFileName, individualID + "\r\n");
+            console.log(individualID);
         }
     }
 }
@@ -336,12 +344,12 @@ Return: none
 Description: Outputs all family members born in the last 30 days to the file
 */
 function listRecentBirths(oFileName) {
-    writeToFile(oFileName, "Recent Births: \r\n");
+    console.log("Recent Births:");
      for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
         let birthAgeDays = getDiffInDays(currentEntity.BIRT, NOW);
         if (birthAgeDays < 30){
-            writeToFile(oFileName, individualID + "\r\n");
+            console.log(individualID);
         }
     }
 }
@@ -355,14 +363,13 @@ Return: Success: true
 Description: Loads iFileName into lines by splitting at newline and sets up parsing to write to oFileName
 */
 function ParseGedcomFile(iFileName, oFileName) {
-    console.log("Parsing Gedcom File...");
+    console.debug("Parsing Gedcom File...");
     let errorCnt = 0;
     let data;
     try {
         data = fs.readFileSync(iFileName, {encoding:'utf8'});
-    }
-    catch(e) {
-        console.log("Error opening file! Make sure file exists and file name is correct");
+    } catch(e) {
+        console.debug("Error opening file! Make sure file exists and file name is correct");
         return false;
     }
     const lines = data.split("\n"); //make an array of lines to pull data from
@@ -370,16 +377,18 @@ function ParseGedcomFile(iFileName, oFileName) {
 
     printEntities(oFileName);
 
-    writeToFile(oFileName, "Errors: \r\n");
+    console.log("Errors:");
     // Validity Checks
     getAges(oFileName);
     errorCnt += lessThan150Years(oFileName);
     //
 
-    writeToFile(oFileName, "There were " + errorCnt + " errors in this Gedcom file!\r\n");
-    if (errorCnt > 0) writeToFile(oFileName, "Check above for details on these errors!");
+    console.log("There were " + errorCnt + " errors in this Gedcom file!");
+    if (errorCnt > 0) console.log("Check above for details on these errors!");
 
-    writeToFile(oFileName, "\r\n\r\nLists: \r\n");
+    console.log("");
+    console.log("");
+    console.log("Lists:");
     // Lists Generated
     listDeceased(oFileName);
     listRecentBirths(oFileName);
@@ -393,6 +402,4 @@ const iFileName = "GEDCOM.txt";
 const oFileName = "Results.txt";
 
 const success = ParseGedcomFile(iFileName, oFileName);
-if (success){
-    console.log("All done!\r\n");
-}
+if (success) console.debug("All done!");

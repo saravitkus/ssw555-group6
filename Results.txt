@@ -686,54 +686,48 @@ Line: 0 TRLR
 Level: 0
 Tag: TRLR, Tag Meaning: Trailer record at end of file
 
+
 Individuals:
-@I1@: Susan /Brown/
-@I2@: John /Brown/
-@I3@: Michelle /Davis/
-@I4@: Ed /Brown/
-@I5@: Lillian /Johns/
-@I6@: Thomas /Green/
-@I7@: Justin /Green/
-@I8@: Margaret /Green/
-@I9@: Rick /Davis/
-@I10@: Justine /Collins/
-@I11@: Paul /Davis/
-@I12@: Ashley /Brown/
-@I13@: Bob /Brown/
-@I14@: Mark /Marris/
-@I15@: Mary /Brown/
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ID     NAME               SEX  BIRT                                                       FAMS  FAMC  DEAT                                                     
+-----  -----------------  ---  ---------------------------------------------------------  ----  ----  ---------------------------------------------------------
+@I1@   Susan /Brown/      F    Tue Jan 04 1994 00:00:00 GMT-0500 (Eastern Standard Time)  @F5@  @F1@                                                           
+@I2@   John /Brown/       M    Tue Jul 09 1963 00:00:00 GMT-0400 (Eastern Daylight Time)  @F1@  @F2@                                                           
+@I3@   Michelle /Davis/   F    Thu Mar 12 1964 00:00:00 GMT-0400 (Eastern Daylight Time)  @F1@  @F3@                                                           
+@I4@   Ed /Brown/         M    Fri Nov 15 1918 00:00:00 GMT-0500 (Eastern Standard Time)  @F2@                                                                 
+@I5@   Lillian /Johns/    F    Tue Oct 05 1920 00:00:00 GMT-0400 (Eastern Daylight Time)  @F4@                                                                 
+@I6@   Thomas /Green/     M    Fri Oct 07 1960 00:00:00 GMT-0400 (Eastern Daylight Time)        @F4@                                                           
+@I7@   Justin /Green/     M    Thu Oct 02 1800 00:00:00 GMT-0400 (Eastern Daylight Time)  @F4@        Wed Nov 29 1961 00:00:00 GMT-0500 (Eastern Standard Time)
+@I8@   Margaret /Green/   F    Fri Oct 07 1960 00:00:00 GMT-0400 (Eastern Daylight Time)        @F4@                                                           
+@I9@   Rick /Davis/       M    Fri Aug 15 1930 00:00:00 GMT-0400 (Eastern Daylight Time)  @F3@                                                                 
+@I10@  Justine /Collins/  F    Thu Jan 30 1930 00:00:00 GMT-0500 (Eastern Standard Time)  @F3@                                                                 
+@I11@  Paul /Davis/       M    Fri Sep 02 1966 00:00:00 GMT-0400 (Eastern Daylight Time)        @F3@                                                           
+@I12@  Ashley /Brown/     F    Sun May 19 1991 00:00:00 GMT-0400 (Eastern Daylight Time)        @F1@  Fri Nov 06 2009 00:00:00 GMT-0500 (Eastern Standard Time)
+@I13@  Bob /Brown/        M    Sat Sep 24 2016 00:00:00 GMT-0400 (Eastern Daylight Time)        @F5@                                                           
+@I14@  Mark /Marris/      F    Fri Nov 14 1800 00:00:00 GMT-0500 (Eastern Standard Time)  @F5@                                                                 
+@I15@  Mary /Brown/       F    Sat Sep 24 2016 00:00:00 GMT-0400 (Eastern Daylight Time)        @F5@                                                           
 
 Families:
-@F1@:
-Husband: John /Brown/
-Wife: Michelle /Davis/
+------------------------------------------------------------------------------------
+ID    HUSB   WIFE   CHIL   MARR                                                     
+----  -----  -----  -----  ---------------------------------------------------------
+@F1@  @I2@   @I3@   @I12@                                                           
+@F2@  @I4@   @I5@   @I2@                                                            
+@F4@  @I7@   @I5@   @I8@                                                            
+@F3@  @I9@   @I10@  @I11@                                                           
+@F5@  @I14@  @I1@   @I15@  Thu Jan 05 2017 00:00:00 GMT-0500 (Eastern Standard Time)
 
-@F2@:
-Husband: Ed /Brown/
-Wife: Lillian /Johns/
-
-@F4@:
-Husband: Justin /Green/
-Wife: Lillian /Johns/
-
-@F3@:
-Husband: Rick /Davis/
-Wife: Justine /Collins/
-
-@F5@:
-Husband: Mark /Marris/
-Wife: Susan /Brown/
-
-Errors: 
+Errors:
 @I7@: Over 150 years old!
 @I14@: Over 150 years old!
 There were 2 errors in this Gedcom file!
 Check above for details on these errors!
 
-Lists: 
-Deceased Family Members: 
+
+Lists:
+Deceased Family Members:
 @I7@
 @I12@
-Recent Births: 
+Recent Births:
 @I13@
 @I15@
