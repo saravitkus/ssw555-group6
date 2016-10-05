@@ -243,25 +243,19 @@ function ParseGedcomData(oFileName, lines) {
 
         line = trimSpace(lines[lineIndex]);
 
-        // Write whole line
         if (line === "") continue;
-        console.log("Line: " + line);
 
-        // Find and write level
+        // Find level
         level = getLevel(line);
-        if (level === "") console.log("Level: CANNOT FIND LEVEL");
-        console.log("Level: " + level);
+        if (level === "") continue;
         if (level === "0") currentEntity = null;
 
-        // Find and write tag and meaning
+        // Find tag and meaning
         tag = getTag(line, level);
         validTag = isTagValid(tag, level);
         if (validTag) {
             tagMeaning = getTagMeaning(tag, level);
-            console.log("Tag: " + tag + ", Tag Meaning: " + tagMeaning);
         } else {
-            console.log("Tag: Invalid tag");
-            console.log("");
             continue;
         }
 
@@ -278,27 +272,11 @@ function ParseGedcomData(oFileName, lines) {
                 currentEntity[tag] = getData(line, level, tag);
             }
         }
-
-        console.log(""); // Newline to separate each line's data
     }
 }
 
 // Validity Checks
 //////////////////////////////////////////////////////
-
-/*
-Input: none
-Return: none
-Description: Calculates ages for all individuals and adds it to an "AGE" field
-*/
-function getAges(oFileName) {
-    console.debug("Calculating ages...")
-    for (const individualID in entityDict.INDI) {
-        const currentEntity = entityDict.INDI[individualID];
-        currentEntity.AGE = getDiffInYears(currentEntity.BIRT, currentEntity.DEAT || NOW);
-    }
-    console.debug("Done calculating ages!");
-}
 
 /*
 Input: none
@@ -393,6 +371,20 @@ function checkGenderAndRole() {
 //////////////////////////////////////////////////////
 
 /*
+Input: none
+Return: none
+Description: Calculates ages for all individuals and adds it to an "AGE" field
+*/
+function getAges(oFileName) {
+    console.log("Individual Ages:");
+    for (const individualID in entityDict.INDI) {
+        const currentEntity = entityDict.INDI[individualID];
+        currentEntity.AGE = getDiffInYears(currentEntity.BIRT, currentEntity.DEAT || NOW);
+        console.log(individualID + ": " + currentEntity.AGE)
+    }
+}
+
+/*
 Input: oFileName: string
 Return: none
 Description: Outputs all deceased family members to the file
@@ -446,24 +438,32 @@ function ParseGedcomFile(iFileName, oFileName) {
 
     printEntities(oFileName);
 
-    console.log("Errors:");
-    // Validity Checks
+    console.log("Lists:");
+    console.log("");
+    // Lists Generated
     getAges(oFileName);
+    console.log("");
+    listDeceased(oFileName);
+    console.log("");
+    listRecentBirths(oFileName);
+    //
+
+    console.log("");
+    console.log("");
+    console.log("Errors:");
+    console.log("");
+
+    // Validity Checks
     errorCnt += lessThan150Years(oFileName);
+    console.log("");
     errorCnt += checkDatesAfterNOW();
+    console.log("");
     errorCnt += checkGenderAndRole();
     //
 
+    console.log("");
     console.log("There were " + errorCnt + " errors in this Gedcom file!");
     if (errorCnt > 0) console.log("Check above for details on these errors!");
-
-    console.log("");
-    console.log("");
-    console.log("Lists:");
-    // Lists Generated
-    listDeceased(oFileName);
-    listRecentBirths(oFileName);
-    //
 
     return true;
 }
