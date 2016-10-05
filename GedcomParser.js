@@ -285,6 +285,7 @@ Description: Checks all individuals for an age greater than 150 years old. Retur
 */
 function lessThan150Years(oFileName) {
     console.debug("Checking for individuals over the age of 150 years old...");
+    console.log("US07: Less Than 150 Years Old");
     let errorCnt = 0;
     for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
@@ -303,6 +304,7 @@ Description: Checks all dates on individuals and families to make sure they are 
 */
 function checkDatesAfterNOW() {
     console.debug("Checking for dates after NOW...");
+    console.log("US01: Dates Before Current Date");
     let errorCnt = 0;
 
     // Check each individual:
@@ -339,6 +341,7 @@ Description: Checks all families a verifies each spouse's role matches their gen
 */
 function checkGenderAndRole() {
     console.debug("Checking for genders that don't match their spousal role...");
+    console.log("US21: Correct Gender for Role");
     let errorCnt = 0;
 
     // Check each family:
@@ -376,7 +379,7 @@ Return: none
 Description: Calculates ages for all individuals and adds it to an "AGE" field
 */
 function getAges(oFileName) {
-    console.log("Individual Ages:");
+    console.log("US27: Include Individual Ages");
     for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
         currentEntity.AGE = getDiffInYears(currentEntity.BIRT, currentEntity.DEAT || NOW);
@@ -390,7 +393,7 @@ Return: none
 Description: Outputs all deceased family members to the file
 */
 function listDeceased(oFileName) {
-    console.log("Deceased Family Members:");
+    console.log("US29: List Deceased");
      for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
         if (currentEntity.DEAT != undefined){
@@ -405,7 +408,7 @@ Return: none
 Description: Outputs all family members born in the last 30 days to the file
 */
 function listRecentBirths(oFileName) {
-    console.log("Recent Births:");
+    console.log("US35: List Recent Births");
      for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
         let birthAgeDays = getDiffInDays(currentEntity.BIRT, NOW);

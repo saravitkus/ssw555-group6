@@ -31,7 +31,7 @@ ID    HUSB   WIFE   CHIL   MARR
 
 Lists:
 
-Individual Ages:
+US27: Include Individual Ages
 @I1@: 22
 @I2@: 53
 @I3@: 52
@@ -48,22 +48,25 @@ Individual Ages:
 @I14@: 215
 @I15@: 0
 
-Deceased Family Members:
+US29: List Deceased
 @I7@
 @I12@
 
-Recent Births:
+US35: List Recent Births
 @I13@
 @I15@
 
 
 Errors:
 
+US07: Less Than 150 Years Old
 @I7@: Over 150 years old!
 @I14@: Over 150 years old!
 
+US01: Dates Before Current Date
 @F5@: MARR is after NOW!
 
+US21: Correct Gender for Role
 @F5@: HUSB is not of gender 'M'!
 
 There were 4 errors in this Gedcom file!
