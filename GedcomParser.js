@@ -275,6 +275,26 @@ function ParseGedcomData(oFileName, lines) {
     }
 }
 
+//////////////////////////////////////////////////////
+
+// Additional Parsing Steps
+//////////////////////////////////////////////////////
+
+/*
+Input: none
+Return: none
+Description: Calculates ages for all individuals and adds it to an "AGE" field
+*/
+function parseAges() {
+    console.debug("US27: Parsing Individual Ages");
+    for (const individualID in entityDict.INDI) {
+        const currentEntity = entityDict.INDI[individualID];
+        currentEntity.AGE = getDiffInYears(currentEntity.BIRT, currentEntity.DEAT || NOW);
+    }
+}
+
+//////////////////////////////////////////////////////
+
 // Validity Checks
 //////////////////////////////////////////////////////
 
@@ -283,7 +303,7 @@ Input: none
 Return: integer
 Description: Checks all individuals for an age greater than 150 years old. Returns a count of the frequency of this occurence
 */
-function lessThan150Years(oFileName) {
+function lessThan150Years() {
     console.debug("Checking for individuals over the age of 150 years old...");
     console.log("US07: Less Than 150 Years Old");
     let errorCnt = 0;
@@ -378,21 +398,19 @@ Input: none
 Return: none
 Description: Calculates ages for all individuals and adds it to an "AGE" field
 */
-function getAges(oFileName) {
-    console.log("US27: Include Individual Ages");
+function listAges() {
+    console.log("US27: List Individual Ages");
     for (const individualID in entityDict.INDI) {
-        const currentEntity = entityDict.INDI[individualID];
-        currentEntity.AGE = getDiffInYears(currentEntity.BIRT, currentEntity.DEAT || NOW);
-        console.log(individualID + ": " + currentEntity.AGE)
+        console.log(individualID + ": " + entityDict.INDI[individualID].AGE)
     }
 }
 
 /*
-Input: oFileName: string
+Input: none
 Return: none
 Description: Outputs all deceased family members to the file
 */
-function listDeceased(oFileName) {
+function listDeceased() {
     console.log("US29: List Deceased");
      for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
@@ -403,11 +421,11 @@ function listDeceased(oFileName) {
 }
 
 /*
-Input: oFileName: string
+Input: none
 Return: none
 Description: Outputs all family members born in the last 30 days to the file
 */
-function listRecentBirths(oFileName) {
+function listRecentBirths() {
     console.log("US35: List Recent Births");
      for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
@@ -439,16 +457,20 @@ function ParseGedcomFile(iFileName, oFileName) {
     const lines = data.split("\n"); //make an array of lines to pull data from
     ParseGedcomData(oFileName, lines);
 
-    printEntities(oFileName);
+    // Additional parsing steps:
+    console.debug("Additional Parsing:");
+    parseAges();
+
+    printEntities();
 
     console.log("Lists:");
     console.log("");
     // Lists Generated
-    getAges(oFileName);
+    listAges();
     console.log("");
-    listDeceased(oFileName);
+    listDeceased();
     console.log("");
-    listRecentBirths(oFileName);
+    listRecentBirths();
     //
 
     console.log("");
@@ -457,7 +479,7 @@ function ParseGedcomFile(iFileName, oFileName) {
     console.log("");
 
     // Validity Checks
-    errorCnt += lessThan150Years(oFileName);
+    errorCnt += lessThan150Years();
     console.log("");
     errorCnt += checkDatesAfterNOW();
     console.log("");

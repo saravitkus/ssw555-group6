@@ -1,23 +1,23 @@
 
 Individuals:
----------------------------------------------------------------------------------------------------------------------------------------------------------------
-ID     NAME               SEX  BIRT                                                       FAMS  FAMC  DEAT                                                     
------  -----------------  ---  ---------------------------------------------------------  ----  ----  ---------------------------------------------------------
-@I1@   Susan /Brown/      F    Tue Jan 04 1994 00:00:00 GMT-0500 (Eastern Standard Time)  @F5@  @F1@                                                           
-@I2@   John /Brown/       M    Tue Jul 09 1963 00:00:00 GMT-0400 (Eastern Daylight Time)  @F1@  @F2@                                                           
-@I3@   Michelle /Davis/   F    Thu Mar 12 1964 00:00:00 GMT-0400 (Eastern Daylight Time)  @F1@  @F3@                                                           
-@I4@   Ed /Brown/         M    Fri Nov 15 1918 00:00:00 GMT-0500 (Eastern Standard Time)  @F2@                                                                 
-@I5@   Lillian /Johns/    F    Tue Oct 05 1920 00:00:00 GMT-0400 (Eastern Daylight Time)  @F4@                                                                 
-@I6@   Thomas /Green/     M    Fri Oct 07 1960 00:00:00 GMT-0400 (Eastern Daylight Time)        @F4@                                                           
-@I7@   Justin /Green/     M    Thu Oct 02 1800 00:00:00 GMT-0400 (Eastern Daylight Time)  @F4@        Wed Nov 29 1961 00:00:00 GMT-0500 (Eastern Standard Time)
-@I8@   Margaret /Green/   F    Fri Oct 07 1960 00:00:00 GMT-0400 (Eastern Daylight Time)        @F4@                                                           
-@I9@   Rick /Davis/       M    Fri Aug 15 1930 00:00:00 GMT-0400 (Eastern Daylight Time)  @F3@                                                                 
-@I10@  Justine /Collins/  F    Thu Jan 30 1930 00:00:00 GMT-0500 (Eastern Standard Time)  @F3@                                                                 
-@I11@  Paul /Davis/       M    Fri Sep 02 1966 00:00:00 GMT-0400 (Eastern Daylight Time)        @F3@                                                           
-@I12@  Ashley /Brown/     F    Sun May 19 1991 00:00:00 GMT-0400 (Eastern Daylight Time)        @F1@  Fri Nov 06 2009 00:00:00 GMT-0500 (Eastern Standard Time)
-@I13@  Bob /Brown/        M    Sat Sep 24 2016 00:00:00 GMT-0400 (Eastern Daylight Time)        @F5@                                                           
-@I14@  Mark /Marris/      F    Fri Nov 14 1800 00:00:00 GMT-0500 (Eastern Standard Time)  @F5@                                                                 
-@I15@  Mary /Brown/       F    Sat Sep 24 2016 00:00:00 GMT-0400 (Eastern Daylight Time)        @F5@                                                           
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ID     NAME               SEX  BIRT                                                       FAMS  FAMC  AGE  DEAT                                                     
+-----  -----------------  ---  ---------------------------------------------------------  ----  ----  ---  ---------------------------------------------------------
+@I1@   Susan /Brown/      F    Tue Jan 04 1994 00:00:00 GMT-0500 (Eastern Standard Time)  @F5@  @F1@  22                                                            
+@I2@   John /Brown/       M    Tue Jul 09 1963 00:00:00 GMT-0400 (Eastern Daylight Time)  @F1@  @F2@  53                                                            
+@I3@   Michelle /Davis/   F    Thu Mar 12 1964 00:00:00 GMT-0400 (Eastern Daylight Time)  @F1@  @F3@  52                                                            
+@I4@   Ed /Brown/         M    Fri Nov 15 1918 00:00:00 GMT-0500 (Eastern Standard Time)  @F2@        97                                                            
+@I5@   Lillian /Johns/    F    Tue Oct 05 1920 00:00:00 GMT-0400 (Eastern Daylight Time)  @F4@        96                                                            
+@I6@   Thomas /Green/     M    Fri Oct 07 1960 00:00:00 GMT-0400 (Eastern Daylight Time)        @F4@  55                                                            
+@I7@   Justin /Green/     M    Thu Oct 02 1800 00:00:00 GMT-0400 (Eastern Daylight Time)  @F4@        161  Wed Nov 29 1961 00:00:00 GMT-0500 (Eastern Standard Time)
+@I8@   Margaret /Green/   F    Fri Oct 07 1960 00:00:00 GMT-0400 (Eastern Daylight Time)        @F4@  55                                                            
+@I9@   Rick /Davis/       M    Fri Aug 15 1930 00:00:00 GMT-0400 (Eastern Daylight Time)  @F3@        86                                                            
+@I10@  Justine /Collins/  F    Thu Jan 30 1930 00:00:00 GMT-0500 (Eastern Standard Time)  @F3@        86                                                            
+@I11@  Paul /Davis/       M    Fri Sep 02 1966 00:00:00 GMT-0400 (Eastern Daylight Time)        @F3@  50                                                            
+@I12@  Ashley /Brown/     F    Sun May 19 1991 00:00:00 GMT-0400 (Eastern Daylight Time)        @F1@  18   Fri Nov 06 2009 00:00:00 GMT-0500 (Eastern Standard Time)
+@I13@  Bob /Brown/        M    Sat Sep 24 2016 00:00:00 GMT-0400 (Eastern Daylight Time)        @F5@  0                                                             
+@I14@  Mark /Marris/      F    Fri Nov 14 1800 00:00:00 GMT-0500 (Eastern Standard Time)  @F5@        215                                                           
+@I15@  Mary /Brown/       F    Sat Sep 24 2016 00:00:00 GMT-0400 (Eastern Daylight Time)        @F5@  0                                                             
 
 Families:
 ------------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ ID    HUSB   WIFE   CHIL   MARR
 
 Lists:
 
-US27: Include Individual Ages
+US27: List Individual Ages
 @I1@: 22
 @I2@: 53
 @I3@: 52
