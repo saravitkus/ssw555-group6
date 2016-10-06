@@ -24,6 +24,9 @@ require('console.table'); // Adds console.table()
     };
 })();
 
+// Set default toString for Date to be of local date format:
+Date.prototype.toString = Date.prototype.toLocaleDateString;
+
 // Current Date Object
 const NOW = new Date();
 

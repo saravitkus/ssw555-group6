@@ -1,33 +1,33 @@
 
 Individuals:
---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-ID     NAME               SEX  BIRT                                                       FAMS  FAMC  AGE  DEAT                                                     
------  -----------------  ---  ---------------------------------------------------------  ----  ----  ---  ---------------------------------------------------------
-@I1@   Susan /Brown/      F    Tue Jan 04 1994 00:00:00 GMT-0500 (Eastern Standard Time)  @F5@  @F1@  22                                                            
-@I2@   John /Brown/       M    Tue Jul 09 1963 00:00:00 GMT-0400 (Eastern Daylight Time)  @F1@  @F2@  53                                                            
-@I3@   Michelle /Davis/   F    Thu Mar 12 1964 00:00:00 GMT-0400 (Eastern Daylight Time)  @F1@  @F3@  52                                                            
-@I4@   Ed /Brown/         M    Fri Nov 15 1918 00:00:00 GMT-0500 (Eastern Standard Time)  @F2@        97                                                            
-@I5@   Lillian /Johns/    F    Tue Oct 05 1920 00:00:00 GMT-0400 (Eastern Daylight Time)  @F4@        96                                                            
-@I6@   Thomas /Green/     M    Fri Oct 07 1960 00:00:00 GMT-0400 (Eastern Daylight Time)        @F4@  55                                                            
-@I7@   Justin /Green/     M    Thu Oct 02 1800 00:00:00 GMT-0400 (Eastern Daylight Time)  @F4@        161  Wed Nov 29 1961 00:00:00 GMT-0500 (Eastern Standard Time)
-@I8@   Margaret /Green/   F    Fri Oct 07 1960 00:00:00 GMT-0400 (Eastern Daylight Time)        @F4@  55                                                            
-@I9@   Rick /Davis/       M    Fri Aug 15 1930 00:00:00 GMT-0400 (Eastern Daylight Time)  @F3@        86                                                            
-@I10@  Justine /Collins/  F    Thu Jan 30 1930 00:00:00 GMT-0500 (Eastern Standard Time)  @F3@        86                                                            
-@I11@  Paul /Davis/       M    Fri Sep 02 1966 00:00:00 GMT-0400 (Eastern Daylight Time)        @F3@  50                                                            
-@I12@  Ashley /Brown/     F    Sun May 19 1991 00:00:00 GMT-0400 (Eastern Daylight Time)        @F1@  18   Fri Nov 06 2009 00:00:00 GMT-0500 (Eastern Standard Time)
-@I13@  Bob /Brown/        M    Sat Sep 24 2016 00:00:00 GMT-0400 (Eastern Daylight Time)        @F5@  0                                                             
-@I14@  Mark /Marris/      F    Fri Nov 14 1800 00:00:00 GMT-0500 (Eastern Standard Time)  @F5@        215                                                           
-@I15@  Mary /Brown/       F    Sat Sep 24 2016 00:00:00 GMT-0400 (Eastern Daylight Time)        @F5@  0                                                             
+----------------------------------------------------------------------
+ID     NAME               SEX  BIRT        FAMS  FAMC  AGE  DEAT      
+-----  -----------------  ---  ----------  ----  ----  ---  ----------
+@I1@   Susan /Brown/      F    1/4/1994    @F5@  @F1@  22             
+@I2@   John /Brown/       M    7/9/1963    @F1@  @F2@  53             
+@I3@   Michelle /Davis/   F    3/11/1964   @F1@  @F3@  52             
+@I4@   Ed /Brown/         M    11/15/1918  @F2@        97             
+@I5@   Lillian /Johns/    F    10/5/1920   @F4@        96             
+@I6@   Thomas /Green/     M    10/7/1960         @F4@  55             
+@I7@   Justin /Green/     M    10/1/1800   @F4@        161  11/29/1961
+@I8@   Margaret /Green/   F    10/7/1960         @F4@  55             
+@I9@   Rick /Davis/       M    8/15/1930   @F3@        86             
+@I10@  Justine /Collins/  F    1/30/1930   @F3@        86             
+@I11@  Paul /Davis/       M    9/2/1966          @F3@  50             
+@I12@  Ashley /Brown/     F    5/19/1991         @F1@  18   11/6/2009 
+@I13@  Bob /Brown/        M    9/24/2016         @F5@  0              
+@I14@  Mark /Marris/      F    11/14/1800  @F5@        215            
+@I15@  Mary /Brown/       F    9/24/2016         @F5@  0              
 
 Families:
-------------------------------------------------------------------------------------
-ID    HUSB   WIFE   CHIL   MARR                                                     
-----  -----  -----  -----  ---------------------------------------------------------
-@F1@  @I2@   @I3@   @I12@                                                           
-@F2@  @I4@   @I5@   @I2@                                                            
-@F4@  @I7@   @I5@   @I8@                                                            
-@F3@  @I9@   @I10@  @I11@                                                           
-@F5@  @I14@  @I1@   @I15@  Thu Jan 05 2017 00:00:00 GMT-0500 (Eastern Standard Time)
+-----------------------------------
+ID    HUSB   WIFE   CHIL   MARR    
+----  -----  -----  -----  --------
+@F1@  @I2@   @I3@   @I12@          
+@F2@  @I4@   @I5@   @I2@           
+@F4@  @I7@   @I5@   @I8@           
+@F3@  @I9@   @I10@  @I11@          
+@F5@  @I14@  @I1@   @I15@  1/5/2017
 
 Lists:
 
