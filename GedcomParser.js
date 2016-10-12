@@ -439,6 +439,24 @@ function listRecentBirths() {
     }
 }
 
+/*
+Input: none
+Return: none
+Description: Outputs all family members born in the last 30 days to the file
+*/
+function listRecentDeaths() {
+    console.log("US36: List Recent Deaths");
+     for (const individualID in entityDict.INDI) {
+        const currentEntity = entityDict.INDI[individualID];
+        if (currentEntity.DEAT != undefined){
+            let daysSinceDeath = getDiffInDays(currentEntity.DEAT, NOW);
+            if (daysSinceDeath < 30){
+                console.log(individualID);
+            }
+        }
+    }
+}
+
 //////////////////////////////////////////////////////
 
 /*
@@ -474,6 +492,8 @@ function ParseGedcomFile(iFileName, oFileName) {
     listDeceased();
     console.log("");
     listRecentBirths();
+    console.log("");
+    listRecentDeaths();
     //
 
     console.log("");
