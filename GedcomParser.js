@@ -110,6 +110,16 @@ function getDiffInDays(firstDate, secondDate) {
 }
 
 /*
+Input: firstDate, secondDate: string
+Return: Integer
+Description: Returns the number of days between two Date objects, excluding the year
+*/
+function getDaysUntilDate(firstDate, secondDate) {
+    let days = Math.round(getDiffInDays(firstDate, secondDate) - (getDiffInYears(firstDate, secondDate) * 365.25));
+    return days;
+}
+
+/*
 Input: line: string
 Return: Success: level as a string
         Failure: blank string
@@ -442,7 +452,7 @@ function listRecentBirths() {
 /*
 Input: none
 Return: none
-Description: Outputs all family members born in the last 30 days to the file
+Description: Outputs all family members who died in the last 30 days to the file
 */
 function listRecentDeaths() {
     console.log("US36: List Recent Deaths");
@@ -456,6 +466,25 @@ function listRecentDeaths() {
         }
     }
 }
+
+/*
+Input: none
+Return: none
+Description: Outputs all family members who have a birthday in the next 30 days to the file
+*/
+function listUpcomingBirthdays() {
+    console.log("US38: List Upcoming Birthdays");
+     for (const individualID in entityDict.INDI) {
+        const currentEntity = entityDict.INDI[individualID];
+        if (currentEntity.DEAT === undefined){
+            let daysUntilBday = getDaysUntilDate(NOW, currentEntity.BIRT);
+            if (daysUntilBday < 30 && daysUntilBday > 0){
+                console.log(individualID + ": " + currentEntity.BIRT);
+            }
+        }
+    }
+}
+
 
 //////////////////////////////////////////////////////
 
@@ -494,6 +523,8 @@ function ParseGedcomFile(iFileName, oFileName) {
     listRecentBirths();
     console.log("");
     listRecentDeaths();
+    console.log("");
+    listUpcomingBirthdays();
     //
 
     console.log("");

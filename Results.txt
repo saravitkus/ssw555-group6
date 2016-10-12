@@ -67,6 +67,9 @@ US35: List Recent Births
 US36: List Recent Deaths
 @I18@
 
+US38: List Upcoming Birthdays
+@I17@: 10/20/1993
+
 
 Errors:
 
