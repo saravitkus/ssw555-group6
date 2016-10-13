@@ -276,7 +276,10 @@ function ParseGedcomData(oFileName, lines) {
             const id = getID(line);
             currentEntity = entityDict[tag][id] = { ID: id };
         } else if(currentEntity) {
-            if(DATETAGS.has(tag)) {
+            if(tag === "CHIL") {
+                if (!currentEntity.CHIL) currentEntity[tag] = [];
+                currentEntity[tag].push(getData(line, level, tag));
+            } else if(DATETAGS.has(tag)) {
                 const nextLine = trimSpace(lines[++lineIndex]);
                 const nextLevel = (Number(level) + 1).toString();
                 const nextTag = getTag(nextLine, nextLevel);
@@ -303,6 +306,26 @@ function parseAges() {
     for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
         currentEntity.AGE = getDiffInYears(currentEntity.BIRT, currentEntity.DEAT || NOW);
+    }
+}
+
+function sortSiblings() {
+    console.debug("US28: Sorting Siblings by Age");
+    for (const familyID in entityDict.FAM){
+        let sortedSiblings = entityDict.FAM[familyID].CHIL || [];
+        const numSiblings = sortedSiblings.length;
+        if (numSiblings === 0) return;
+        for (let sibIndex = 1; sibIndex < numSiblings; ++sibIndex) {
+            const sibling = sortedSiblings[sibIndex];
+            const siblingBD = entityDict.INDI[sortedSiblings[sibIndex]].BIRT;
+            let tempIndex = sibIndex - 1;
+            while (tempIndex >= 0 && entityDict.INDI[sortedSiblings[tempIndex]].BIRT > siblingBD) {
+                sortedSiblings[tempIndex + 1] = sortedSiblings[tempIndex];
+                --tempIndex;
+            }
+            sortedSiblings[tempIndex + 1] = sibling;
+        }
+        entityDict.FAM.familyID = sortedSiblings;
     }
 }
 
@@ -510,6 +533,7 @@ function ParseGedcomFile(iFileName, oFileName) {
     // Additional parsing steps:
     console.debug("Additional Parsing:");
     parseAges();
+    sortSiblings();
 
     printEntities();
 
