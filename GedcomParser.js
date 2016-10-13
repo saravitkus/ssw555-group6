@@ -538,6 +538,20 @@ function listUpcomingBirthdays() {
     }
 }
 
+/*
+Input: none
+Return: none
+Description: Outputs all family children sorted by age
+*/
+function listChildrenSortedAge() {
+    console.log("US28: Order Siblings by Age");
+     for (const familyID in entityDict.FAM) {
+        const currentEntity = entityDict.FAM[familyID];
+        if(!currentEntity.CHIL) continue;
+        console.log(familyID + ": " + currentEntity.CHIL);
+    }
+}
+
 
 //////////////////////////////////////////////////////
 
@@ -579,6 +593,8 @@ function ParseGedcomFile(iFileName, oFileName) {
     listRecentDeaths();
     console.log("");
     listUpcomingBirthdays();
+    console.log("");
+    listChildrenSortedAge();
     //
 
     console.log("");
