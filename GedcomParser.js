@@ -319,7 +319,7 @@ function sortSiblings() {
     for (const familyID in entityDict.FAM){
         let sortedSiblings = entityDict.FAM[familyID].CHIL || [];
         const numSiblings = sortedSiblings.length;
-        if (numSiblings === 0) return;
+        if (numSiblings === 0) continue;
         for (let sibIndex = 1; sibIndex < numSiblings; ++sibIndex) {
             const sibling = sortedSiblings[sibIndex];
             const siblingBD = entityDict.INDI[sortedSiblings[sibIndex]].BIRT;
@@ -422,6 +422,32 @@ function checkGenderAndRole() {
                 console.log(familyID + ": WIFE is not of gender 'F'!");
                 ++errorCnt;
             }
+        }
+    }
+
+    return errorCnt;
+}
+
+/*
+Input: none
+Return: integer
+Description: Checks all families and verifies that no one got married before they were 12 years old
+*/
+function checkMarriageBefore14() {
+    console.debug("Checking for husbands and/or wives that were younger than 14 when they got married...");
+    console.log("US10: Marriage after 14");
+    let errorCnt = 0;
+    for (const familyID in entityDict.FAM){
+        const marriage = entityDict.FAM[familyID];
+        const marriageDate = entityDict.FAM[familyID].MARR;
+        if (!marriageDate) continue;
+        if (getDiffInYears(entityDict.INDI[marriage.HUSB].BIRT, marriageDate) < 14) {
+            console.log(familyID + ": HUSB was not at least 14 when he got married!");
+            ++errorCnt;
+        }
+        if (getDiffInYears(entityDict.INDI[marriage.WIFE].BIRT, marriageDate) < 14) {
+            console.log(familyID + ": WIFE was not at least 14 when she got married!")
+            ++errorCnt;
         }
     }
 
@@ -566,6 +592,8 @@ function ParseGedcomFile(iFileName, oFileName) {
     errorCnt += checkDatesAfterNOW();
     console.log("");
     errorCnt += checkGenderAndRole();
+    console.log("");
+    errorCnt += checkMarriageBefore14();
     //
 
     console.log("");

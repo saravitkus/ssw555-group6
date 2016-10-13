@@ -83,5 +83,9 @@ US01: Dates Before Current Date
 US21: Correct Gender for Role
 @F1@: HUSB is not of gender 'M'!
 
-There were 4 errors in this Gedcom file!
+US10: Marriage after 14
+@F6@: HUSB was not at least 14 when he got married!
+@F6@: WIFE was not at least 14 when she got married!
+
+There were 6 errors in this Gedcom file!
 Check above for details on these errors!
