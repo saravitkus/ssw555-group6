@@ -309,6 +309,11 @@ function parseAges() {
     }
 }
 
+/*
+Input: none
+Return: none
+Description: Sorts siblings so that oldest children appear first in family list
+*/
 function sortSiblings() {
     console.debug("US28: Sorting Siblings by Age");
     for (const familyID in entityDict.FAM){
@@ -325,7 +330,6 @@ function sortSiblings() {
             }
             sortedSiblings[tempIndex + 1] = sibling;
         }
-        entityDict.FAM.familyID = sortedSiblings;
     }
 }
 
