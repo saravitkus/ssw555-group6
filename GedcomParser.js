@@ -216,68 +216,56 @@ Input: none
 Return: none
 Description: Prints out all individuals and families
 */
-function printEntities(oFileName) {
+function printEntities() {
     // TODO: console.table() will print a table
     console.log("");
-    console.table("Individuals:", Object.keys(entityDict.INDI).map((key) => { return entityDict.INDI[key]; }));
-    console.table("Families:", Object.keys(entityDict.FAM).map((key) => { return entityDict.FAM[key]; }));
-    /*console.log("Individuals:\r\n");
-    for (let individualID in entityDict.INDI){
-        console.log(individualID + ": " + getIndividualAttr(individualID, "NAME"));
-    }
-    console.log("\r\n");
-    console.log("Families:\r\n");
-    for (let familyID in entityDict.FAM){
-        console.log(familyID +":\r\nHusband: " + getFamilyAttr(familyID, "HUSB", "NAME") + "\r\nWife: " + getFamilyAttr(familyID, "WIFE", "NAME") + "\r\n\r\n");
-    }*/
+    console.table("Individuals:", Object.keys(entityDict.INDI)/*.sort()*/.map((key) => {
+        return entityDict.INDI[key];
+    }));
+    console.table("Families:", Object.keys(entityDict.FAM)/*.sort()*/.map((key) => {
+        return entityDict.FAM[key];
+    }));
 }
 
 /*
-Input: oFileName: string, lines: array of strings
+Input: lines: array of strings
 Return: none
 Description: Parse the lines one-by-one and find desired data. Then write to oFile.
 */
-function ParseGedcomData(oFileName, lines) {
+function ParseGedcomData(lines) {
     console.debug("Parsing Gedcom Data...");
-
-    fs.writeFileSync(oFileName, ""); // If the result file already exists, erase all data in it
+    // TODO: Generate a new dictionary every time this function is called. Don't reuse the same dictionary.
+    // TODO: Convert this parsing code to be a class.
 
     let line = "";
     let level = "";
     let tag = "";
     let tagMeaning = "";
-    let validTag = false;
     let fileLength = lines.length;
     let currentEntity = null;
 
-
     for (let lineIndex = 0; lineIndex < fileLength; ++lineIndex) {
-
+        // Trim line:
         line = trimSpace(lines[lineIndex]);
-
         if (line === "") continue;
 
-        // Find level
+        // Find level:
         level = getLevel(line);
         if (level === "") continue;
         if (level === "0") currentEntity = null;
 
-        // Find tag and meaning
+        // Find tag and meaning:
         tag = getTag(line, level);
-        validTag = isTagValid(tag, level);
-        if (validTag) {
-            tagMeaning = getTagMeaning(tag, level);
-        } else {
-            continue;
-        }
+        if (!isTagValid(tag, level)) continue;
+        tagMeaning = getTagMeaning(tag, level);
 
         if (tag in entityDict) {
             const id = getID(line);
             currentEntity = entityDict[tag][id] = { ID: id };
-        } else if(currentEntity) {
-            if(tag === "CHIL") {
-                if (!currentEntity.CHIL) currentEntity[tag] = [];
-                currentEntity[tag].push(getData(line, level, tag));
+        } else if (currentEntity) {
+            if (tag === "CHIL") {
+                if (!currentEntity.CHIL) currentEntity.CHIL = [];
+                currentEntity.CHIL.push(getData(line, level, tag));
             } else if(DATETAGS.has(tag)) {
                 const nextLine = trimSpace(lines[++lineIndex]);
                 const nextLevel = (Number(level) + 1).toString();
@@ -369,25 +357,25 @@ function checkDatesAfterNOW() {
     // Check each individual:
     for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
-        DATETAGS.forEach((tag) => {
+        for (const tag of DATETAGS) {
             // Check if this tag on the entity is greater than NOW:
             if (currentEntity[tag] && currentEntity[tag] > NOW) {
                 console.log(individualID + ": " + tag + " is after NOW!");
                 ++errorCnt;
             }
-        });
+        }
     }
 
     // Check each family:
     for (const familyID in entityDict.FAM) {
         const currentEntity = entityDict.FAM[familyID];
-        DATETAGS.forEach((tag) => {
+        for (const tag of DATETAGS) {
             // Check if this tag on the entity is greater than NOW:
             if (currentEntity[tag] && currentEntity[tag] > NOW) {
                 console.log(familyID + ": " + tag + " is after NOW!");
                 ++errorCnt;
             }
-        });
+        }
     }
 
     return errorCnt;
@@ -459,33 +447,9 @@ Return: integer
 Description: Checks all dates on individuals and families to make sure they are invalid. Returns a count of the frequency of this occurence
 */
 function checkInvalidDates() {
-    console.debug("Checking for dates after NOW...");
-    console.log("US01: Dates Before Current Date");
+    console.debug("Checking for invalid dates...");
+    console.log("US42: Reject Illegitimate Dates");
     let errorCnt = 0;
-
-    // Check each individual:
-    for (const individualID in entityDict.INDI) {
-        const currentEntity = entityDict.INDI[individualID];
-        DATETAGS.forEach((tag) => {
-            // Check if this tag on the entity is greater than NOW:
-            if (currentEntity[tag] && currentEntity[tag] > NOW) {
-                console.log(individualID + ": " + tag + " is after NOW!");
-                ++errorCnt;
-            }
-        });
-    }
-
-    // Check each family:
-    for (const familyID in entityDict.FAM) {
-        const currentEntity = entityDict.FAM[familyID];
-        DATETAGS.forEach((tag) => {
-            // Check if this tag on the entity is greater than NOW:
-            if (currentEntity[tag] && currentEntity[tag] > NOW) {
-                console.log(familyID + ": " + tag + " is after NOW!");
-                ++errorCnt;
-            }
-        });
-    }
 
     return errorCnt;
 }
@@ -592,23 +556,22 @@ function listChildrenSortedAge() {
 //////////////////////////////////////////////////////
 
 /*
-Input: iFileName: string, oFileName: string
+Input: iFileName: string
 Return: Success: true
         Failure: false
-Description: Loads iFileName into lines by splitting at newline and sets up parsing to write to oFileName
+Description: Loads iFileName into lines by splitting at newline and sets up parsing and error checks
 */
-function ParseGedcomFile(iFileName, oFileName) {
+function ParseGedcomFile(iFileName) {
     console.debug("Parsing Gedcom File...");
-    let errorCnt = 0;
-    let data;
+    let lines;
     try {
-        data = fs.readFileSync(iFileName, {encoding:'utf8'});
+        lines = fs.readFileSync(iFileName, { encoding:'utf8' }).split(/\r?\n/); // Make an array of lines to pull data from
     } catch(e) {
         console.debug("Error opening file! Make sure file exists and file name is correct");
         return false;
     }
-    const lines = data.split("\n"); //make an array of lines to pull data from
-    ParseGedcomData(oFileName, lines);
+
+    ParseGedcomData(lines);
 
     // Additional parsing steps:
     console.debug("Additional Parsing:");
@@ -639,6 +602,7 @@ function ParseGedcomFile(iFileName, oFileName) {
     console.log("");
 
     // Validity Checks
+    let errorCnt = 0;
     errorCnt += lessThan150Years();
     console.log("");
     errorCnt += checkDatesAfterNOW();
@@ -652,12 +616,9 @@ function ParseGedcomFile(iFileName, oFileName) {
     console.log("There were " + errorCnt + " errors in this Gedcom file!");
     if (errorCnt > 0) console.log("Check above for details on these errors!");
 
-    return true;
+    return (errorCnt === 0);
 }
 
 // Main function to set up file to be parsed and where to put the data
-const iFileName = "GEDCOM.txt";
-const oFileName = "Results.txt";
-
-const success = ParseGedcomFile(iFileName, oFileName);
+const success = ParseGedcomFile("GEDCOM.txt");
 if (success) console.debug("All done!");
