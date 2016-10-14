@@ -48,7 +48,7 @@ const VALIDTAGDICTS = {
     },
     "1": {
         "NAME": "Name of individual",
-        "SEX": "Sex of individaul",
+        "SEX": "Sex of individual",
         "BIRT": "Birth date of individual",
         "DEAT": "Date of death of individual",
         "FAMC": "Family where individual is a child",
@@ -317,8 +317,8 @@ Description: Calculates ages for all individuals and adds it to an "AGE" field
 function parseAges() {
     console.debug("US27: Parsing Individual Ages");
     for (const individualID in entityDict.INDI) {
-        const currentEntity = entityDict.INDI[individualID];
-        currentEntity.AGE = getDiffInYears(currentEntity.BIRT, currentEntity.DEAT || NOW);
+        const individual = entityDict.INDI[individualID];
+        individual.AGE = getDiffInYears(individual.BIRT, individual.DEAT || NOW);
     }
 }
 
@@ -361,9 +361,9 @@ function lessThan150Years() {
     console.log("US07: Less Than 150 Years Old");
     let errorCnt = 0;
     for (const individualID in entityDict.INDI) {
-        const currentEntity = entityDict.INDI[individualID];
-        if (currentEntity.AGE >= 150) {
-            console.log("Line " + currentEntity.BIRT_LINE + (currentEntity.DEAT ? "&" + currentEntity.DEAT_LINE : "") + ": " + individualID + " is over 150 years old!");
+        const individual = entityDict.INDI[individualID];
+        if (individual.AGE >= 150) {
+            console.log("Line " + individual.BIRT_LINE + (individual.DEAT ? "&" + individual.DEAT_LINE : "") + ": " + individualID + " is over 150 years old!");
             ++errorCnt;
         }
     }
@@ -382,11 +382,11 @@ function checkDatesAfterNOW() {
 
     // Check each individual:
     for (const individualID in entityDict.INDI) {
-        const currentEntity = entityDict.INDI[individualID];
+        const individual = entityDict.INDI[individualID];
         for (const tag of DATETAGS) {
             // Check if this tag on the entity is greater than NOW:
-            if (currentEntity[tag] && currentEntity[tag] > NOW) {
-                console.log("Line " + currentEntity[tag + "_LINE"] + ": " + individualID + " " + tag + " is after NOW!");
+            if (individual[tag] && individual[tag] > NOW) {
+                console.log("Line " + individual[tag + "_LINE"] + ": " + individualID + " " + tag + " is after NOW!");
                 ++errorCnt;
             }
         }
@@ -394,11 +394,11 @@ function checkDatesAfterNOW() {
 
     // Check each family:
     for (const familyID in entityDict.FAM) {
-        const currentEntity = entityDict.FAM[familyID];
+        const family = entityDict.FAM[familyID];
         for (const tag of DATETAGS) {
             // Check if this tag on the entity is greater than NOW:
-            if (currentEntity[tag] && currentEntity[tag] > NOW) {
-                console.log("Line " + currentEntity[tag + "_LINE"] + ": " + familyID + " " + tag + " is after NOW!");
+            if (family[tag] && family[tag] > NOW) {
+                console.log("Line " + family[tag + "_LINE"] + ": " + familyID + " " + tag + " is after NOW!");
                 ++errorCnt;
             }
         }
@@ -451,16 +451,16 @@ function checkMarriageBefore14() {
     console.log("US10: Marriage after 14");
     let errorCnt = 0;
     for (const familyID in entityDict.FAM) {
-        const marriage = entityDict.FAM[familyID];
+        const family = entityDict.FAM[familyID];
         const marriageDate = entityDict.FAM[familyID].MARR;
         if (!marriageDate) continue;
-        if (getDiffInYears(entityDict.INDI[marriage.HUSB].BIRT, marriageDate) < 14) {
-            let lines = [marriage.MARR_LINE, entityDict.INDI[marriage.HUSB].BIRT_LINE].sort().join("&");
+        if (getDiffInYears(entityDict.INDI[family.HUSB].BIRT, marriageDate) < 14) {
+            let lines = [family.MARR_LINE, entityDict.INDI[family.HUSB].BIRT_LINE].sort().join("&");
             console.log("Line " + lines + ": " + familyID + " HUSB was not at least 14 when he got married!");
             ++errorCnt;
         }
-        if (getDiffInYears(entityDict.INDI[marriage.WIFE].BIRT, marriageDate) < 14) {
-            let lines = [marriage.MARR_LINE, entityDict.INDI[marriage.WIFE].BIRT_LINE].sort().join("&");
+        if (getDiffInYears(entityDict.INDI[family.WIFE].BIRT, marriageDate) < 14) {
+            let lines = [family.MARR_LINE, entityDict.INDI[family.WIFE].BIRT_LINE].sort().join("&");
             console.log("Line " + lines + ": " + familyID + " WIFE was not at least 14 when he got married!");
             ++errorCnt;
         }
@@ -481,11 +481,11 @@ function checkInvalidDates() {
 
     // Check each individual:
     for (const individualID in entityDict.INDI) {
-        const currentEntity = entityDict.INDI[individualID];
+        const individual = entityDict.INDI[individualID];
         for (const tag of DATETAGS) {
             // Check if this tag on the entity is invalid:
-            if (currentEntity[tag] && !currentEntity[tag].isValid()) {
-                console.log("Line " + currentEntity[tag + "_LINE"] + ": " + individualID + " " + tag + " is invalid!");
+            if (individual[tag] && !individual[tag].isValid()) {
+                console.log("Line " + individual[tag + "_LINE"] + ": " + individualID + " " + tag + " is invalid!");
                 ++errorCnt;
             }
         }
@@ -493,11 +493,11 @@ function checkInvalidDates() {
 
     // Check each family:
     for (const familyID in entityDict.FAM) {
-        const currentEntity = entityDict.FAM[familyID];
+        const family = entityDict.FAM[familyID];
         for (const tag of DATETAGS) {
             // Check if this tag on the entity is invalid:
-            if (currentEntity[tag] && !currentEntity[tag].isValid()) {
-                console.log("Line " + currentEntity[tag + "_LINE"] + ": " + familyID + " " + tag + " is invalid!");
+            if (family[tag] && !family[tag].isValid()) {
+                console.log("Line " + family[tag + "_LINE"] + ": " + familyID + " " + tag + " is invalid!");
                 ++errorCnt;
             }
         }
@@ -531,8 +531,7 @@ Description: Outputs all deceased family members to the file
 function listDeceased() {
     console.log("US29: List Deceased");
     for (const individualID in entityDict.INDI) {
-        const currentEntity = entityDict.INDI[individualID];
-        if (currentEntity.DEAT !== undefined) {
+        if (entityDict.INDI[individualID].DEAT !== undefined) {
             console.log(individualID);
         }
     }
@@ -546,8 +545,7 @@ Description: Outputs all family members born in the last 30 days to the file
 function listRecentBirths() {
     console.log("US35: List Recent Births");
     for (const individualID in entityDict.INDI) {
-        const currentEntity = entityDict.INDI[individualID];
-        let birthAgeDays = getDiffInDays(currentEntity.BIRT, NOW);
+        let birthAgeDays = getDiffInDays(entityDict.INDI[individualID].BIRT, NOW);
         if (birthAgeDays < 30) {
             console.log(individualID);
         }
@@ -562,9 +560,9 @@ Description: Outputs all family members who died in the last 30 days to the file
 function listRecentDeaths() {
     console.log("US36: List Recent Deaths");
     for (const individualID in entityDict.INDI) {
-        const currentEntity = entityDict.INDI[individualID];
-        if (currentEntity.DEAT !== undefined) {
-            let daysSinceDeath = getDiffInDays(currentEntity.DEAT, NOW);
+        const individual = entityDict.INDI[individualID];
+        if (individual.DEAT !== undefined) {
+            let daysSinceDeath = getDiffInDays(individual.DEAT, NOW);
             if (daysSinceDeath < 30) {
                 console.log(individualID);
             }
@@ -580,11 +578,11 @@ Description: Outputs all family members who have a birthday in the next 30 days 
 function listUpcomingBirthdays() {
     console.log("US38: List Upcoming Birthdays");
     for (const individualID in entityDict.INDI) {
-        const currentEntity = entityDict.INDI[individualID];
-        if (currentEntity.DEAT === undefined) {
-            let daysUntilBday = getDaysUntilDate(currentEntity.BIRT);
+        const individual = entityDict.INDI[individualID];
+        if (individual.DEAT === undefined) {
+            let daysUntilBday = getDaysUntilDate(individual.BIRT);
             if (daysUntilBday < 30 && daysUntilBday > 0) {
-                console.log(individualID + ": " + currentEntity.BIRT.toString());
+                console.log(individualID + ": " + individual.BIRT.toString());
             }
         }
     }
@@ -598,9 +596,9 @@ Description: Outputs all family children sorted by age
 function listChildrenSortedAge() {
     console.log("US28: Order Siblings by Age");
     for (const familyID in entityDict.FAM) {
-        const currentEntity = entityDict.FAM[familyID];
-        if (!currentEntity.CHIL) continue;
-        console.log(familyID + ": " + currentEntity.CHIL);
+        const family = entityDict.FAM[familyID];
+        if (!family.CHIL) continue;
+        console.log(familyID + ": " + family.CHIL);
     }
 }
 
