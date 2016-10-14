@@ -477,6 +477,30 @@ function checkInvalidDates() {
     console.log("US42: Reject Illegitimate Dates");
     let errorCnt = 0;
 
+    // Check each individual:
+    for (const individualID in entityDict.INDI) {
+        const currentEntity = entityDict.INDI[individualID];
+        for (const tag of DATETAGS) {
+            // Check if this tag on the entity is invalid:
+            if (currentEntity[tag] && !currentEntity[tag].isValid()) {
+                console.log(individualID + ": " + tag + " is invalid!");
+                ++errorCnt;
+            }
+        }
+    }
+
+    // Check each family:
+    for (const familyID in entityDict.FAM) {
+        const currentEntity = entityDict.FAM[familyID];
+        for (const tag of DATETAGS) {
+            // Check if this tag on the entity is invalid:
+            if (currentEntity[tag] && !currentEntity[tag].isValid()) {
+                console.log(familyID + ": " + tag + " is invalid!");
+                ++errorCnt;
+            }
+        }
+    }
+
     return errorCnt;
 }
 
@@ -629,6 +653,8 @@ function ParseGedcomFile(iFileName) {
 
     // Validity Checks
     let errorCnt = 0;
+    errorCnt += checkInvalidDates();
+    console.log("");
     errorCnt += lessThan150Years();
     console.log("");
     errorCnt += checkDatesAfterNOW();

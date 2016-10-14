@@ -83,6 +83,9 @@ US28: Order Siblings by Age
 
 Errors:
 
+US42: Reject Illegitimate Dates
+@I16@: BIRT is invalid!
+
 US07: Less Than 150 Years Old
 @I7@: Over 150 years old!
 @I14@: Over 150 years old!
@@ -96,5 +99,5 @@ US21: Correct Gender for Role
 US10: Marriage after 14
 @F6@: WIFE was not at least 14 when she got married!
 
-There were 5 errors in this Gedcom file!
+There were 6 errors in this Gedcom file!
 Check above for details on these errors!
