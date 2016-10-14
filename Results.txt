@@ -70,6 +70,7 @@ US36: List Recent Deaths
 @I18@
 
 US38: List Upcoming Birthdays
+@I17@: 10/20/1993
 
 US28: Order Siblings by Age
 @F1@: @I13@,@I15@

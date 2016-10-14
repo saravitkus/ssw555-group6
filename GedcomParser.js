@@ -19,7 +19,7 @@ require('console.table'); // Adds console.table()
     console.debug = console.log; // debug doesn't log to file!
     console.log = function () {
         // Logs to the file as well:
-        logFile.write(util.format.apply(null, arguments) + '\r\n');
+        logFile.write(util.format.apply(null, arguments).replace(/([^\r])\n/gm, "$1\r\n") + '\r\n');
         //logStdout.write(util.format.apply(null, arguments) + '\r\n');
         console.debug.apply(console, arguments);
     };
@@ -114,7 +114,7 @@ Description: Returns the number of days between two Date objects, excluding the 
 function getDaysUntilDate(date) {
     let dateClone = date.clone();
     dateClone.year(NOW.year());
-    if (date < NOW) dateClone.year(dateClone.year() + 1);
+    if (dateClone < NOW) dateClone.year(dateClone.year() + 1);
     return dateClone.diff(NOW, 'days');
 }
 
@@ -567,8 +567,8 @@ function listUpcomingBirthdays() {
         const currentEntity = entityDict.INDI[individualID];
         if (currentEntity.DEAT === undefined){
             let daysUntilBday = getDaysUntilDate(currentEntity.BIRT);
-            if (daysUntilBday < 30 && daysUntilBday > 0){
-                console.log(individualID + ": " + currentEntity.BIRT);
+            if (daysUntilBday < 30 && daysUntilBday > 0) {
+                console.log(individualID + ": " + currentEntity.BIRT.toString());
             }
         }
     }
