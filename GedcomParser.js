@@ -219,11 +219,29 @@ Description: Prints out all individuals and families
 function printEntities() {
     // TODO: console.table() will print a table
     console.log("");
-    console.table("Individuals:", Object.keys(entityDict.INDI)/*.sort()*/.map((key) => {
-        return entityDict.INDI[key];
+
+    // Print out individuals in a table, sorted by order in GEDCOM, and remove '_LINE' fields:
+    console.table("Individuals:", Object.keys(entityDict.INDI).map((key) => {
+        const entity = entityDict.INDI[key];
+        let clone = {};
+        for (const field in entity) {
+            if (!field.endsWith("_LINE")) clone[field] = entity[field];
+        }
+        return clone;
+    }).sort((a, b) => {
+        return (entityDict.INDI[a.ID].ID_LINE < entityDict.INDI[b.ID].ID_LINE ? -1 : 1);
     }));
-    console.table("Families:", Object.keys(entityDict.FAM)/*.sort()*/.map((key) => {
-        return entityDict.FAM[key];
+
+    // Print out families in a table, sorted by order in GEDCOM, and remove '_LINE' fields:
+    console.table("Families:", Object.keys(entityDict.FAM).map((key) => {
+        const entity = entityDict.FAM[key];
+        let clone = {};
+        for (const field in entity) {
+            if (!field.endsWith("_LINE")) clone[field] = entity[field];
+        }
+        return clone;
+    }).sort((a, b) => {
+        return (entityDict.FAM[a.ID].ID_LINE < entityDict.FAM[b.ID].ID_LINE ? -1 : 1);
     }));
 }
 
@@ -262,17 +280,25 @@ function ParseGedcomData(lines) {
         if (tag in entityDict) {
             const id = getID(line);
             currentEntity = entityDict[tag][id] = { ID: id };
+            currentEntity.ID_LINE = lineIndex;
         } else if (currentEntity) {
             if (tag === "CHIL") {
-                if (!currentEntity.CHIL) currentEntity.CHIL = [];
-                currentEntity.CHIL.push(getData(line, level, tag));
+                if (!currentEntity.CHIL) {
+                    currentEntity.CHIL = [];
+                    currentEntity.CHIL_LINE = {};
+                }
+                const childID = getData(line, level, tag);
+                currentEntity.CHIL.push(childID);
+                currentEntity.CHIL_LINE[childID] = lineIndex;
             } else if(DATETAGS.has(tag)) {
                 const nextLine = trimSpace(lines[++lineIndex]);
                 const nextLevel = (Number(level) + 1).toString();
                 const nextTag = getTag(nextLine, nextLevel);
                 currentEntity[tag] = formatDate(getData(nextLine, nextLevel, nextTag));
+                currentEntity[tag + "_LINE"] = lineIndex;
             } else {
                 currentEntity[tag] = getData(line, level, tag);
+                currentEntity[tag + "_LINE"] = lineIndex;
             }
         }
     }
