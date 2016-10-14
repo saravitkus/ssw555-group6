@@ -317,18 +317,9 @@ function sortSiblings() {
     console.debug("US28: Sorting Siblings by Age");
     for (const familyID in entityDict.FAM){
         let sortedSiblings = entityDict.FAM[familyID].CHIL || [];
-        const numSiblings = sortedSiblings.length;
-        if (numSiblings === 0) continue;
-        for (let sibIndex = 1; sibIndex < numSiblings; ++sibIndex) {
-            const sibling = sortedSiblings[sibIndex];
-            const siblingBD = entityDict.INDI[sortedSiblings[sibIndex]].BIRT;
-            let tempIndex = sibIndex - 1;
-            while (tempIndex >= 0 && entityDict.INDI[sortedSiblings[tempIndex]].BIRT > siblingBD) {
-                sortedSiblings[tempIndex + 1] = sortedSiblings[tempIndex];
-                --tempIndex;
-            }
-            sortedSiblings[tempIndex + 1] = sibling;
-        }
+        sortedSiblings.sort((a, b) => {
+            return entityDict.INDI[a].BIRT.diff(entityDict.INDI[b].BIRT);
+        });
     }
 }
 
