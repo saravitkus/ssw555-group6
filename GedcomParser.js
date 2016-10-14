@@ -3,7 +3,6 @@ Group6 - Alex Sabella, Dillon Uzar, Sara Vitkus
 SSW 555 - Agile Methods for Software Development
 GEDCOM Parser
 */
-
 "use strict";
 
 // Imports:
@@ -17,7 +16,7 @@ require('console.table'); // Adds console.table()
     let logFile = fs.createWriteStream('results.txt', { flags: 'w' });
     let logStdout = process.stdout;
     console.debug = console.log; // debug doesn't log to file!
-    console.log = function () {
+    console.log = function() {
         // Logs to the file as well:
         logFile.write(util.format.apply(null, arguments).replace(/([^\r])\n/gm, "$1\r\n") + '\r\n');
         //logStdout.write(util.format.apply(null, arguments) + '\r\n');
@@ -27,7 +26,7 @@ require('console.table'); // Adds console.table()
 
 // Set default toString for Date to be of local date format:
 Date.prototype.toString = Date.prototype.toLocaleDateString;
-moment.fn.toString = function () { return this.format("L"); };
+moment.fn.toString = function() { return this.format("L"); };
 
 // Current Date Object
 const NOW = moment();
@@ -39,35 +38,36 @@ const ZEROTAGS = new Set(["HEAD", "TRLR", "NOTE"]);
 const DATETAGS = new Set(["BIRT", "DEAT", "MARR", "DIV"]);
 
 // Dictionary lookup for tags and their meanings
-const VALIDTAGDICTS = { "0":   {
-                                "INDI":     "Individual record",
-                                "FAM":      "Family record",
-                                "HEAD":     "Header record at beginning of file",
-                                "TRLR":     "Trailer record at end of file",
-                                "NOTE":     "Comments, may be used to describe tests"
-                                },
-                        "1":    {
-                                "NAME":     "Name of individual",
-                                "SEX":      "Sex of individaul",
-                                "BIRT":     "Birth date of individual",
-                                "DEAT":     "Date of death of individual",
-                                "FAMC":     "Family where individual is a child",
-                                "FAMS":     "Family where individual is a spouse",
-                                "MARR":     "Marriage event for family",
-                                "HUSB":     "Husband in family",
-                                "WIFE":     "Wife in family",
-                                "CHIL":     "Child in family",
-                                "DIV":      "Divorce event in family",
-                                },
-                        "2":    {
-                                "DATE":     "Date that an event occured",
-                                }
+const VALIDTAGDICTS = {
+    "0": {
+        "INDI": "Individual record",
+        "FAM": "Family record",
+        "HEAD": "Header record at beginning of file",
+        "TRLR": "Trailer record at end of file",
+        "NOTE": "Comments, may be used to describe tests"
+    },
+    "1": {
+        "NAME": "Name of individual",
+        "SEX": "Sex of individaul",
+        "BIRT": "Birth date of individual",
+        "DEAT": "Date of death of individual",
+        "FAMC": "Family where individual is a child",
+        "FAMS": "Family where individual is a spouse",
+        "MARR": "Marriage event for family",
+        "HUSB": "Husband in family",
+        "WIFE": "Wife in family",
+        "CHIL": "Child in family",
+        "DIV": "Divorce event in family",
+    },
+    "2": {
+        "DATE": "Date that an event occured",
+    }
 };
 
 // Dictionaty of entities
 let entityDict = {
-                    "INDI": {},
-                    "FAM":  {}
+    "INDI": {},
+    "FAM": {}
 };
 
 /*
@@ -76,7 +76,7 @@ Return: string
 Description: Removes whitespace from beginning and end of string
 */
 function trimSpace(str) {
-    return str.replace(/^\s+|\s+$/g,"");
+    return str.replace(/^\s+|\s+$/g, "");
 }
 
 /*
@@ -280,7 +280,7 @@ function ParseGedcomData(lines) {
         if (tag in entityDict) {
             const id = getID(line);
             currentEntity = entityDict[tag][id] = { ID: id };
-            currentEntity.ID_LINE = lineIndex;
+            currentEntity.ID_LINE = lineIndex + 1;
         } else if (currentEntity) {
             if (tag === "CHIL") {
                 if (!currentEntity.CHIL) {
@@ -289,16 +289,16 @@ function ParseGedcomData(lines) {
                 }
                 const childID = getData(line, level, tag);
                 currentEntity.CHIL.push(childID);
-                currentEntity.CHIL_LINE[childID] = lineIndex;
-            } else if(DATETAGS.has(tag)) {
+                currentEntity.CHIL_LINE[childID] = lineIndex + 1;
+            } else if (DATETAGS.has(tag)) {
                 const nextLine = trimSpace(lines[++lineIndex]);
                 const nextLevel = (Number(level) + 1).toString();
                 const nextTag = getTag(nextLine, nextLevel);
                 currentEntity[tag] = formatDate(getData(nextLine, nextLevel, nextTag));
-                currentEntity[tag + "_LINE"] = lineIndex;
+                currentEntity[tag + "_LINE"] = lineIndex + 1;
             } else {
                 currentEntity[tag] = getData(line, level, tag);
-                currentEntity[tag + "_LINE"] = lineIndex;
+                currentEntity[tag + "_LINE"] = lineIndex + 1;
             }
         }
     }
@@ -329,7 +329,7 @@ Description: Sorts siblings so that oldest children appear first in family list
 */
 function sortSiblings() {
     console.debug("US28: Sorting Siblings by Age");
-    for (const familyID in entityDict.FAM){
+    for (const familyID in entityDict.FAM) {
         let sortedSiblings = entityDict.FAM[familyID].CHIL || [];
         const numSiblings = sortedSiblings.length;
         if (numSiblings === 0) continue;
@@ -362,8 +362,8 @@ function lessThan150Years() {
     let errorCnt = 0;
     for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
-        if(currentEntity.AGE >= 150) {
-            console.log(individualID + ": Over 150 years old!");
+        if (currentEntity.AGE >= 150) {
+            console.log("Line " + currentEntity.BIRT_LINE + (currentEntity.DEAT ? "&" + currentEntity.DEAT_LINE : "") + ": " + individualID + " is over 150 years old!");
             ++errorCnt;
         }
     }
@@ -386,7 +386,7 @@ function checkDatesAfterNOW() {
         for (const tag of DATETAGS) {
             // Check if this tag on the entity is greater than NOW:
             if (currentEntity[tag] && currentEntity[tag] > NOW) {
-                console.log(individualID + ": " + tag + " is after NOW!");
+                console.log("Line " + currentEntity[tag + "_LINE"] + ": " + individualID + " " + tag + " is after NOW!");
                 ++errorCnt;
             }
         }
@@ -398,7 +398,7 @@ function checkDatesAfterNOW() {
         for (const tag of DATETAGS) {
             // Check if this tag on the entity is greater than NOW:
             if (currentEntity[tag] && currentEntity[tag] > NOW) {
-                console.log(familyID + ": " + tag + " is after NOW!");
+                console.log("Line " + currentEntity[tag + "_LINE"] + ": " + familyID + " " + tag + " is after NOW!");
                 ++errorCnt;
             }
         }
@@ -424,7 +424,7 @@ function checkGenderAndRole() {
         if (family.HUSB) {
             const HUSB = entityDict.INDI[family.HUSB];
             if (HUSB && HUSB.SEX !== "M") {
-                console.log(familyID + ": HUSB is not of gender 'M'!");
+                console.log("Line " + family.HUSB_LINE + ": " + familyID + " HUSB is not of gender 'M'!");
                 ++errorCnt;
             }
         }
@@ -432,7 +432,7 @@ function checkGenderAndRole() {
         if (family.WIFE) {
             const WIFE = entityDict.INDI[family.WIFE];
             if (WIFE && WIFE.SEX !== "F") {
-                console.log(familyID + ": WIFE is not of gender 'F'!");
+                console.log("Line " + family.WIFE_LINE + ": " + familyID + " WIFE is not of gender 'F'!");
                 ++errorCnt;
             }
         }
@@ -450,16 +450,18 @@ function checkMarriageBefore14() {
     console.debug("Checking for husbands and/or wives that were younger than 14 when they got married...");
     console.log("US10: Marriage after 14");
     let errorCnt = 0;
-    for (const familyID in entityDict.FAM){
+    for (const familyID in entityDict.FAM) {
         const marriage = entityDict.FAM[familyID];
         const marriageDate = entityDict.FAM[familyID].MARR;
         if (!marriageDate) continue;
         if (getDiffInYears(entityDict.INDI[marriage.HUSB].BIRT, marriageDate) < 14) {
-            console.log(familyID + ": HUSB was not at least 14 when he got married!");
+            let lines = [marriage.MARR_LINE, entityDict.INDI[marriage.HUSB].BIRT_LINE].sort().join("&");
+            console.log("Line " + lines + ": " + familyID + " HUSB was not at least 14 when he got married!");
             ++errorCnt;
         }
         if (getDiffInYears(entityDict.INDI[marriage.WIFE].BIRT, marriageDate) < 14) {
-            console.log(familyID + ": WIFE was not at least 14 when she got married!");
+            let lines = [marriage.MARR_LINE, entityDict.INDI[marriage.WIFE].BIRT_LINE].sort().join("&");
+            console.log("Line " + lines + ": " + familyID + " WIFE was not at least 14 when he got married!");
             ++errorCnt;
         }
     }
@@ -483,7 +485,7 @@ function checkInvalidDates() {
         for (const tag of DATETAGS) {
             // Check if this tag on the entity is invalid:
             if (currentEntity[tag] && !currentEntity[tag].isValid()) {
-                console.log(individualID + ": " + tag + " is invalid!");
+                console.log("Line " + currentEntity[tag + "_LINE"] + ": " + individualID + " " + tag + " is invalid!");
                 ++errorCnt;
             }
         }
@@ -495,7 +497,7 @@ function checkInvalidDates() {
         for (const tag of DATETAGS) {
             // Check if this tag on the entity is invalid:
             if (currentEntity[tag] && !currentEntity[tag].isValid()) {
-                console.log(familyID + ": " + tag + " is invalid!");
+                console.log("Line " + currentEntity[tag + "_LINE"] + ": " + familyID + " " + tag + " is invalid!");
                 ++errorCnt;
             }
         }
@@ -528,9 +530,9 @@ Description: Outputs all deceased family members to the file
 */
 function listDeceased() {
     console.log("US29: List Deceased");
-     for (const individualID in entityDict.INDI) {
+    for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
-        if (currentEntity.DEAT !== undefined){
+        if (currentEntity.DEAT !== undefined) {
             console.log(individualID);
         }
     }
@@ -543,10 +545,10 @@ Description: Outputs all family members born in the last 30 days to the file
 */
 function listRecentBirths() {
     console.log("US35: List Recent Births");
-     for (const individualID in entityDict.INDI) {
+    for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
         let birthAgeDays = getDiffInDays(currentEntity.BIRT, NOW);
-        if (birthAgeDays < 30){
+        if (birthAgeDays < 30) {
             console.log(individualID);
         }
     }
@@ -559,11 +561,11 @@ Description: Outputs all family members who died in the last 30 days to the file
 */
 function listRecentDeaths() {
     console.log("US36: List Recent Deaths");
-     for (const individualID in entityDict.INDI) {
+    for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
-        if (currentEntity.DEAT !== undefined){
+        if (currentEntity.DEAT !== undefined) {
             let daysSinceDeath = getDiffInDays(currentEntity.DEAT, NOW);
-            if (daysSinceDeath < 30){
+            if (daysSinceDeath < 30) {
                 console.log(individualID);
             }
         }
@@ -577,9 +579,9 @@ Description: Outputs all family members who have a birthday in the next 30 days 
 */
 function listUpcomingBirthdays() {
     console.log("US38: List Upcoming Birthdays");
-     for (const individualID in entityDict.INDI) {
+    for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
-        if (currentEntity.DEAT === undefined){
+        if (currentEntity.DEAT === undefined) {
             let daysUntilBday = getDaysUntilDate(currentEntity.BIRT);
             if (daysUntilBday < 30 && daysUntilBday > 0) {
                 console.log(individualID + ": " + currentEntity.BIRT.toString());
@@ -595,9 +597,9 @@ Description: Outputs all family children sorted by age
 */
 function listChildrenSortedAge() {
     console.log("US28: Order Siblings by Age");
-     for (const familyID in entityDict.FAM) {
+    for (const familyID in entityDict.FAM) {
         const currentEntity = entityDict.FAM[familyID];
-        if(!currentEntity.CHIL) continue;
+        if (!currentEntity.CHIL) continue;
         console.log(familyID + ": " + currentEntity.CHIL);
     }
 }
@@ -615,8 +617,8 @@ function ParseGedcomFile(iFileName) {
     console.debug("Parsing Gedcom File...");
     let lines;
     try {
-        lines = fs.readFileSync(iFileName, { encoding:'utf8' }).split(/\r?\n/); // Make an array of lines to pull data from
-    } catch(e) {
+        lines = fs.readFileSync(iFileName, { encoding: 'utf8' }).split(/\r?\n/); // Make an array of lines to pull data from
+    } catch (e) {
         console.debug("Error opening file! Make sure file exists and file name is correct");
         return false;
     }
