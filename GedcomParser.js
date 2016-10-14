@@ -330,6 +330,7 @@ Description: Sorts siblings so that oldest children appear first in family list
 function sortSiblings() {
     console.debug("US28: Sorting Siblings by Age");
     for (const familyID in entityDict.FAM) {
+        /* jshint loopfunc:true */
         let sortedSiblings = entityDict.FAM[familyID].CHIL || [];
         sortedSiblings.sort((a, b) => {
             return entityDict.INDI[a].BIRT.diff(entityDict.INDI[b].BIRT);
