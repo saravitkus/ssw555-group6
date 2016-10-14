@@ -1,38 +1,38 @@
 
 Individuals:
-----------------------------------------------------------------------
-ID     NAME               SEX  BIRT        FAMS  FAMC  AGE  DEAT      
------  -----------------  ---  ----------  ----  ----  ---  ----------
-@I1@   Susan /Brown/      F    1/4/1994    @F1@  @F2@  22             
-@I2@   John /Brown/       M    7/9/1963    @F2@  @F3@  53             
-@I3@   Michelle /Davis/   F    3/11/1964   @F2@  @F4@  52             
-@I4@   Ed /Brown/         M    11/15/1918  @F3@        97             
-@I5@   Lillian /Johns/    F    10/5/1920   @F5@        96             
-@I6@   Thomas /Green/     M    10/7/1960         @F5@  56             
-@I7@   Justin /Green/     M    10/1/1800   @F5@        161  11/29/1961
-@I8@   Margaret /Green/   F    10/7/1960         @F5@  56             
-@I9@   Rick /Davis/       M    8/15/1930   @F4@        86             
-@I10@  Justine /Collins/  F    1/30/1930   @F4@        86             
-@I11@  Paul /Davis/       M    9/2/1966          @F4@  50             
-@I12@  Ashley /Brown/     F    5/19/1991         @F2@  18   11/6/2009 
-@I13@  Bob /Brown/        M    9/24/2016         @F1@  0              
-@I14@  Mark /Marris/      F    11/14/1800  @F1@        215            
-@I15@  Mary /Brown/       F    9/24/2016         @F1@  0              
-@I16@  Derek /Brown/      M    3/3/1993    @F6@  @F2@  23             
-@I17@  Rachel /Greene/    F    10/20/1993  @F6@        22             
-@I18@  Richard /Brown/    M    11/14/2012        @F6@  3    10/11/2016
-@I19@  Phil /Green/       M    7/3/1951          @F5@  65             
+------------------------------------------------------------------------
+ID     NAME               SEX  BIRT          FAMS  FAMC  AGE  DEAT      
+-----  -----------------  ---  ------------  ----  ----  ---  ----------
+@I1@   Susan /Brown/      F    01/04/1994    @F1@  @F2@  22             
+@I2@   John /Brown/       M    07/09/1963    @F2@  @F3@  53             
+@I3@   Michelle /Davis/   F    03/12/1964    @F2@  @F4@  52             
+@I4@   Ed /Brown/         M    11/15/1918    @F3@        97             
+@I5@   Lillian /Johns/    F    10/05/1920    @F5@        96             
+@I6@   Thomas /Green/     M    10/07/1960          @F5@  56             
+@I7@   Justin /Green/     M    10/02/1800    @F5@        161  11/29/1961
+@I8@   Margaret /Green/   F    10/07/1960          @F5@  56             
+@I9@   Rick /Davis/       M    08/15/1930    @F4@        86             
+@I10@  Justine /Collins/  F    01/30/1930    @F4@        86             
+@I11@  Paul /Davis/       M    09/02/1966          @F4@  50             
+@I12@  Ashley /Brown/     F    05/19/1991          @F2@  18   11/06/2009
+@I13@  Bob /Brown/        M    09/24/2016          @F1@  0              
+@I14@  Mark /Marris/      F    11/14/1800    @F1@        215            
+@I15@  Mary /Brown/       F    09/24/2016          @F1@  0              
+@I16@  Derek /Brown/      M    Invalid date  @F6@  @F2@  NaN            
+@I17@  Rachel /Greene/    F    10/20/1993    @F6@        22             
+@I18@  Richard /Brown/    M    11/14/2012          @F6@  3    10/11/2016
+@I19@  Phil /Green/       M    07/03/1951          @F5@  65             
 
 Families:
 ------------------------------------------------
 ID    HUSB   WIFE   CHIL              MARR      
 ----  -----  -----  ----------------  ----------
-@F1@  @I1@   @I14@  @I13@,@I15@       1/5/2017  
-@F2@  @I2@   @I3@   @I12@,@I16@,@I1@  10/30/1981
-@F3@  @I4@   @I5@   @I2@              8/5/1970  
+@F1@  @I1@   @I14@  @I13@,@I15@       01/05/2017
+@F2@  @I2@   @I3@   @I12@,@I1@,@I16@  10/31/1981
+@F3@  @I4@   @I5@   @I2@              08/05/1970
 @F4@  @I9@   @I10@  @I3@,@I11@                  
-@F5@  @I7@   @I5@   @I19@,@I6@,@I8@   10/7/1960 
-@F6@  @I16@  @I17@  @I18@             6/15/1998 
+@F5@  @I7@   @I5@   @I19@,@I6@,@I8@   10/07/1960
+@F6@  @I16@  @I17@  @I18@             06/15/1998
 
 Lists:
 
@@ -52,7 +52,7 @@ US27: List Individual Ages
 @I13@: 0
 @I14@: 215
 @I15@: 0
-@I16@: 23
+@I16@: NaN
 @I17@: 22
 @I18@: 3
 @I19@: 65
@@ -70,11 +70,10 @@ US36: List Recent Deaths
 @I18@
 
 US38: List Upcoming Birthdays
-@I17@: 10/20/1993
 
 US28: Order Siblings by Age
 @F1@: @I13@,@I15@
-@F2@: @I12@,@I16@,@I1@
+@F2@: @I12@,@I1@,@I16@
 @F3@: @I2@
 @F4@: @I3@,@I11@
 @F5@: @I19@,@I6@,@I8@
@@ -94,8 +93,7 @@ US21: Correct Gender for Role
 @F1@: HUSB is not of gender 'M'!
 
 US10: Marriage after 14
-@F6@: HUSB was not at least 14 when he got married!
 @F6@: WIFE was not at least 14 when she got married!
 
-There were 6 errors in this Gedcom file!
+There were 5 errors in this Gedcom file!
 Check above for details on these errors!

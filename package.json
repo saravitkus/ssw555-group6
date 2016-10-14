@@ -4,7 +4,8 @@
   "description": "",
   "main": "GedcomParser.js",
   "dependencies": {
-    "console.table": "^0.7.0"
+    "console.table": "^0.7.0",
+    "moment": "^2.15.1"
   },
   "devDependencies": {},
   "scripts": {

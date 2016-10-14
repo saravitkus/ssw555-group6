@@ -9,6 +9,7 @@ GEDCOM Parser
 // Imports:
 const fs = require('fs'); // File system
 const util = require('util');
+const moment = require('moment');
 require('console.table'); // Adds console.table()
 
 // Setup console.debug:
@@ -26,9 +27,10 @@ require('console.table'); // Adds console.table()
 
 // Set default toString for Date to be of local date format:
 Date.prototype.toString = Date.prototype.toLocaleDateString;
+moment.fn.toString = function () { return this.format("L"); };
 
 // Current Date Object
-const NOW = new Date();
+const NOW = moment();
 
 // List of tags with level 0 that are formatted like the rest of tags
 const ZEROTAGS = new Set(["HEAD", "TRLR", "NOTE"]);
@@ -83,7 +85,7 @@ Return: Date object
 Description: Converts the date string to a date object that can be compared to other date objects
 */
 function formatDate(date) {
-    return new Date(date);
+    return moment(date, "DD MMM YYYY");
 }
 
 /*
@@ -92,11 +94,7 @@ Return: Integer
 Description: Returns the number of years between two Date objects
 */
 function getDiffInYears(firstDate, secondDate) {
-    let years = secondDate.getFullYear() - firstDate.getFullYear();
-    firstDate = new Date(firstDate); // Clones object so that it doesn't overwrite it
-    firstDate.setFullYear(secondDate.getFullYear());
-    if (firstDate > secondDate) --years;
-    return years;
+    return secondDate.diff(firstDate, 'years');
 }
 
 /*
@@ -105,18 +103,19 @@ Return: Integer
 Description: Returns the number of days between two Date objects
 */
 function getDiffInDays(firstDate, secondDate) {
-    let days = Math.round((secondDate.getTime() - firstDate.getTime())/86400000); //1000*60*60*24;
-    return days;
+    return secondDate.diff(firstDate, 'days');
 }
 
 /*
-Input: firstDate, secondDate: string
+Input: date: string
 Return: Integer
 Description: Returns the number of days between two Date objects, excluding the year
 */
-function getDaysUntilDate(firstDate, secondDate) {
-    let days = Math.round(getDiffInDays(firstDate, secondDate) - (getDiffInYears(firstDate, secondDate) * 365.25));
-    return days;
+function getDaysUntilDate(date) {
+    let dateClone = date.clone();
+    dateClone.year(NOW.year());
+    if (date < NOW) dateClone.year(dateClone.year() + 1);
+    return dateClone.diff(NOW, 'days');
 }
 
 /*
@@ -454,6 +453,43 @@ function checkMarriageBefore14() {
     return errorCnt;
 }
 
+/*
+Input: none
+Return: integer
+Description: Checks all dates on individuals and families to make sure they are invalid. Returns a count of the frequency of this occurence
+*/
+function checkInvalidDates() {
+    console.debug("Checking for dates after NOW...");
+    console.log("US01: Dates Before Current Date");
+    let errorCnt = 0;
+
+    // Check each individual:
+    for (const individualID in entityDict.INDI) {
+        const currentEntity = entityDict.INDI[individualID];
+        DATETAGS.forEach((tag) => {
+            // Check if this tag on the entity is greater than NOW:
+            if (currentEntity[tag] && currentEntity[tag] > NOW) {
+                console.log(individualID + ": " + tag + " is after NOW!");
+                ++errorCnt;
+            }
+        });
+    }
+
+    // Check each family:
+    for (const familyID in entityDict.FAM) {
+        const currentEntity = entityDict.FAM[familyID];
+        DATETAGS.forEach((tag) => {
+            // Check if this tag on the entity is greater than NOW:
+            if (currentEntity[tag] && currentEntity[tag] > NOW) {
+                console.log(familyID + ": " + tag + " is after NOW!");
+                ++errorCnt;
+            }
+        });
+    }
+
+    return errorCnt;
+}
+
 //////////////////////////////////////////////////////
 
 // Lists Generated
@@ -530,7 +566,7 @@ function listUpcomingBirthdays() {
      for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
         if (currentEntity.DEAT === undefined){
-            let daysUntilBday = getDaysUntilDate(NOW, currentEntity.BIRT);
+            let daysUntilBday = getDaysUntilDate(currentEntity.BIRT);
             if (daysUntilBday < 30 && daysUntilBday > 0){
                 console.log(individualID + ": " + currentEntity.BIRT);
             }
