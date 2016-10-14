@@ -445,7 +445,7 @@ function checkMarriageBefore14() {
             ++errorCnt;
         }
         if (getDiffInYears(entityDict.INDI[marriage.WIFE].BIRT, marriageDate) < 14) {
-            console.log(familyID + ": WIFE was not at least 14 when she got married!")
+            console.log(familyID + ": WIFE was not at least 14 when she got married!");
             ++errorCnt;
         }
     }
@@ -498,12 +498,12 @@ function checkInvalidDates() {
 /*
 Input: none
 Return: none
-Description: Calculates ages for all individuals and adds it to an "AGE" field
+Description: Outputs age of each individual to file
 */
 function listAges() {
     console.log("US27: List Individual Ages");
     for (const individualID in entityDict.INDI) {
-        console.log(individualID + ": " + entityDict.INDI[individualID].AGE)
+        console.log(individualID + ": " + entityDict.INDI[individualID].AGE);
     }
 }
 
@@ -516,7 +516,7 @@ function listDeceased() {
     console.log("US29: List Deceased");
      for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
-        if (currentEntity.DEAT != undefined){
+        if (currentEntity.DEAT !== undefined){
             console.log(individualID);
         }
     }
@@ -547,7 +547,7 @@ function listRecentDeaths() {
     console.log("US36: List Recent Deaths");
      for (const individualID in entityDict.INDI) {
         const currentEntity = entityDict.INDI[individualID];
-        if (currentEntity.DEAT != undefined){
+        if (currentEntity.DEAT !== undefined){
             let daysSinceDeath = getDiffInDays(currentEntity.DEAT, NOW);
             if (daysSinceDeath < 30){
                 console.log(individualID);
