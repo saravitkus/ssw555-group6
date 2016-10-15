@@ -372,26 +372,17 @@ function checkDatesAfterNOW() {
     console.log("US01: Dates Before Current Date");
     let errorCnt = 0;
 
-    // Check each individual:
-    for (const individualID in entityDict.INDI) {
-        const individual = entityDict.INDI[individualID];
-        for (const tag of DATETAGS) {
-            // Check if this tag on the entity is greater than NOW:
-            if (individual[tag] && individual[tag] > NOW) {
-                console.log("Line " + individual[tag + "_LINE"] + ": " + individualID + " " + tag + " is after NOW!");
-                ++errorCnt;
-            }
-        }
-    }
-
-    // Check each family:
-    for (const familyID in entityDict.FAM) {
-        const family = entityDict.FAM[familyID];
-        for (const tag of DATETAGS) {
-            // Check if this tag on the entity is greater than NOW:
-            if (family[tag] && family[tag] > NOW) {
-                console.log("Line " + family[tag + "_LINE"] + ": " + familyID + " " + tag + " is after NOW!");
-                ++errorCnt;
+    // Check both INDI and FAM dicts:
+    for (const dictName in entityDict) {
+        // Check each entity:
+        for (const entityID in entityDict[dictName]) {
+            const entity = entityDict[dictName][entityID];
+            for (const tag of DATETAGS) {
+                // Check if this tag on the entity is greater than NOW:
+                if (entity[tag] && entity[tag] > NOW) {
+                    console.log("Line " + entity[tag + "_LINE"] + ": " + entityID + " " + tag + " is after NOW!");
+                    ++errorCnt;
+                }
             }
         }
     }
@@ -412,19 +403,12 @@ function checkGenderAndRole() {
     // Check each family:
     for (const familyID in entityDict.FAM) {
         const family = entityDict.FAM[familyID];
-        // Check to make sure HUSB is of gender 'M':
-        if (family.HUSB) {
-            const HUSB = entityDict.INDI[family.HUSB];
-            if (HUSB && HUSB.SEX !== "M") {
-                console.log("Line " + family.HUSB_LINE + ": " + familyID + " HUSB is not of gender 'M'!");
-                ++errorCnt;
-            }
-        }
-        // Check to make sure WIFE is of gender 'F':
-        if (family.WIFE) {
-            const WIFE = entityDict.INDI[family.WIFE];
-            if (WIFE && WIFE.SEX !== "F") {
-                console.log("Line " + family.WIFE_LINE + ": " + familyID + " WIFE is not of gender 'F'!");
+        // Check to make sure HUSB is of gender 'M', and WIFE is of gender 'F':
+        for (const [tag, gender] of [["HUSB", "M"], [["WIFE", "F"]]]) {
+            if (!family[tag]) continue;
+            const entity = entityDict.INDI[family[tag]];
+            if (entity && entity.SEX !== gender) {
+                console.log("Line " + family[tag + "_LINE"] + ": " + familyID + " " + tag + " is not of gender '" + gender + "'!");
                 ++errorCnt;
             }
         }
@@ -444,14 +428,13 @@ function checkMarriageBefore14() {
     let errorCnt = 0;
     for (const familyID in entityDict.FAM) {
         const family = entityDict.FAM[familyID];
-        const marriageDate = entityDict.FAM[familyID].MARR;
-        if (!marriageDate) continue;
-        if (getDiffInYears(entityDict.INDI[family.HUSB].BIRT, marriageDate) < 14) {
+        if (!family.MARR) continue;
+        if (getDiffInYears(entityDict.INDI[family.HUSB].BIRT, family.MARR) < 14) {
             let lines = [family.MARR_LINE, entityDict.INDI[family.HUSB].BIRT_LINE].sort().join("&");
             console.log("Line " + lines + ": " + familyID + " HUSB was not at least 14 when he got married!");
             ++errorCnt;
         }
-        if (getDiffInYears(entityDict.INDI[family.WIFE].BIRT, marriageDate) < 14) {
+        if (getDiffInYears(entityDict.INDI[family.WIFE].BIRT, family.MARR) < 14) {
             let lines = [family.MARR_LINE, entityDict.INDI[family.WIFE].BIRT_LINE].sort().join("&");
             console.log("Line " + lines + ": " + familyID + " WIFE was not at least 14 when he got married!");
             ++errorCnt;
@@ -471,26 +454,17 @@ function checkInvalidDates() {
     console.log("US42: Reject Illegitimate Dates");
     let errorCnt = 0;
 
-    // Check each individual:
-    for (const individualID in entityDict.INDI) {
-        const individual = entityDict.INDI[individualID];
-        for (const tag of DATETAGS) {
-            // Check if this tag on the entity is invalid:
-            if (individual[tag] && !individual[tag].isValid()) {
-                console.log("Line " + individual[tag + "_LINE"] + ": " + individualID + " " + tag + " is invalid!");
-                ++errorCnt;
-            }
-        }
-    }
-
-    // Check each family:
-    for (const familyID in entityDict.FAM) {
-        const family = entityDict.FAM[familyID];
-        for (const tag of DATETAGS) {
-            // Check if this tag on the entity is invalid:
-            if (family[tag] && !family[tag].isValid()) {
-                console.log("Line " + family[tag + "_LINE"] + ": " + familyID + " " + tag + " is invalid!");
-                ++errorCnt;
+    // Check both INDI and FAM dicts:
+    for (const dictName in entityDict) {
+        // Check each entity:
+        for (const entityID in entityDict[dictName]) {
+            const entity = entityDict[dictName][entityID];
+            for (const tag of DATETAGS) {
+                // Check if this tag on the entity is invalid:
+                if (entity[tag] && !entity[tag].isValid()) {
+                    console.log("Line " + entity[tag + "_LINE"] + ": " + entityID + " " + tag + " is invalid!");
+                    ++errorCnt;
+                }
             }
         }
     }
