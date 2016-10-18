@@ -119,49 +119,6 @@ function getDaysUntilDate(date) {
 }
 
 /*
-Input: line: string
-Return: Success: level as a string
-        Failure: blank string
-Description: Parses line to find the level
-*/
-function getLevel(line) {
-    const reLevel = /^(\d+)/;
-    const level = reLevel.exec(line);
-    if (!level) return "";
-    return level[1];
-}
-
-/*
-Input: line: string, level: string
-Return: Success: tag as a string
-        Failure: blank string
-Description: Parses line to find the tag
-*/
-function getTag(line, level) {
-    const tags = line.split(" ");
-    const tagLength = tags.length;
-    let tag = "";
-    if (tagLength < 2) return "";
-    if (level === "0" && !(ZEROTAGS.has(tags[1].toUpperCase()))) { // Check if it is an exception tag
-        if (tagLength < 3) return "";
-        tag = tags[2];
-    } else {
-        tag = tags[1];
-    }
-    return tag.toUpperCase();
-}
-
-/*
-Input: tag: string, level: string
-Return: True if tag is valid
-        False if tag is not valid
-Description: Checks if the tag is valid, given the level
-*/
-function isTagValid(tag, level) {
-    return (tag in VALIDTAGDICTS[level]);
-}
-
-/*
 Input: tag: string, level: string
 Return: Success: tag meaning as a string
         Failure: blank string
@@ -173,24 +130,34 @@ function getTagMeaning(tag, level) {
 
 /*
 Input: line: string
-Return: string
-Description: Gets ID from a line for INDI or FAM
+Return: Success: record object with props: level, tag, data
+        Failure: record object with missing props
+Description: Parses a line into a record object (level, tag and data)
 */
-function getID(line) {
-    const tags = line.split(" ");
-    return tags[1];
-}
+function parseLine(line) {
+    const parts = line.replace(/^\s+|\s+$/g, "").split(/ +/g);
+    let record = {
+        // Extract the level number:
+        level: parts[0]
+    };
 
-/*
-Input: line: string, level: string, tag: string
-Return: string
-Description: Gets data from a line
-*/
-function getData(line, level, tag) {
-    let data = line.replace(level, "");
-    data = data.replace(tag, "");
-    data = trimSpace(data);
-    return data;
+    if (parts.length < 2) return record;
+
+    // Extract tag:
+    let tag = parts[1].toUpperCase();
+    if (tag in VALIDTAGDICTS[record.level]) {
+        record.tag = tag;
+        record.data = parts.slice(2).join(" "); // Extract data
+    } else if (record.level === "0" && parts.length > 2) {
+        tag = parts[2].toUpperCase();
+        // Determine if INDI or FAM:
+        if (tag in VALIDTAGDICTS[0]) {
+            record.tag = tag;
+            record.data = parts[1]; // Extract ID
+        }
+    }
+
+    return record;
 }
 
 /*
@@ -254,52 +221,33 @@ function ParseGedcomData(lines) {
     console.debug("Parsing Gedcom Data...");
     // TODO: Generate a new dictionary every time this function is called. Don't reuse the same dictionary.
     // TODO: Convert this parsing code to be a class.
-
-    let line = "";
-    let level = "";
-    let tag = "";
-    let tagMeaning = "";
-    let fileLength = lines.length;
     let currentEntity = null;
 
-    for (let lineIndex = 0; lineIndex < fileLength; ++lineIndex) {
-        // Trim line:
-        line = trimSpace(lines[lineIndex]);
-        if (line === "") continue;
+    for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
+        let record = parseLine(lines[lineIndex]);
+        if (!record.tag) continue; // If tag wasn't parsed, the line is either blank or bad tag
+        if (record.level === "0") currentEntity = null; // A 0 level tag resets the entity
 
-        // Find level:
-        level = getLevel(line);
-        if (level === "") continue;
-        if (level === "0") currentEntity = null;
-
-        // Find tag and meaning:
-        tag = getTag(line, level);
-        if (!isTagValid(tag, level)) continue;
-        tagMeaning = getTagMeaning(tag, level);
-
-        if (tag in entityDict) {
-            const id = getID(line);
-            currentEntity = entityDict[tag][id] = { ID: id };
-            currentEntity.ID_LINE = lineIndex + 1;
+        if (record.tag in entityDict) {
+            currentEntity = entityDict[record.tag][record.data] = { ID: record.data };
+            currentEntity.ID_LINE = lineIndex + 1; // Remember line number which it was parsed from
         } else if (currentEntity) {
-            if (tag === "CHIL") {
-                if (!currentEntity.CHIL) {
+            if (record.tag === "CHIL") {
+                // Add child to current entity:
+                if (!currentEntity.CHIL) { // Build CHIL field if doesn't exist:
                     currentEntity.CHIL = [];
                     currentEntity.CHIL_LINE = {};
                 }
-                const childID = getData(line, level, tag);
-                currentEntity.CHIL.push(childID);
-                currentEntity.CHIL_LINE[childID] = lineIndex + 1;
-            } else if (DATETAGS.has(tag)) {
-                const nextLine = trimSpace(lines[++lineIndex]);
-                const nextLevel = (Number(level) + 1).toString();
-                const nextTag = getTag(nextLine, nextLevel);
-                currentEntity[tag] = formatDate(getData(nextLine, nextLevel, nextTag));
-                currentEntity[tag + "_LINE"] = lineIndex + 1;
+                currentEntity.CHIL.push(record.data); // data is the ChildID
+            } else if (DATETAGS.has(record.tag)) {
+                // Parse date (which is on the next line):
+                let nextRecord = parseLine(lines[++lineIndex]);
+                currentEntity[record.tag] = formatDate(nextRecord.data); // Parse date
             } else {
-                currentEntity[tag] = getData(line, level, tag);
-                currentEntity[tag + "_LINE"] = lineIndex + 1;
+                // Normal tag+data parsing:
+                currentEntity[record.tag] = record.data;
             }
+            currentEntity[record.tag + "_LINE"] = lineIndex + 1; // Remember line number which it was parsed from
         }
     }
 }
