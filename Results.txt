@@ -88,6 +88,11 @@ US28: Order Siblings by Age
 @F5@: @I19@,@I6@,@I8@
 @F7@: @I18@
 
+US39: List Upcoming Anniversaries
+@F2@: 10/31/1981
+@F7@: 11/15/1998
+
+
 
 Errors:
 
