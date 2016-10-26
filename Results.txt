@@ -100,4 +100,7 @@ Line 175&245: @F6@ WIFE was not at least 14 when he got married!
 
 US03: Birth Before Death
 
-There were NaN errors in this Gedcom file!
+US05: Marriage Before Death
+
+There were 6 errors in this Gedcom file!
+Check above for details on these errors!

@@ -435,10 +435,38 @@ function checkDeathBeforeBirth() {
         const individual = entityDict.INDI[individualID];
         if (!individual.DEAT) continue;
         if (individual.BIRT.DATE > individual.DEAT.DATE) {
-            console.log("Line " + individual.BIRT_LINE + " & " + individual.DEAT_LINE + ": " + individualID + " Birth is after death!");
+            console.log("Line " + individual.BIRT.DATE_LINE + " & " + individual.DEAT.DATE_LINE + ": " + individualID + " Birth is after death!");
             ++errorCnt;
         }
     }
+
+    return errorCnt;
+}
+
+/*
+Input: none
+Return: integer
+Description: Checks all dates on individuals to make sure marriage is before death
+*/
+function checkDeathBeforeMarriage() {
+    console.debug("Checking for deaths before marriages...");
+    console.log("US05: Marriage Before Death");
+    let errorCnt = 0;
+
+    // Check each family
+    for (const familyID in entityDict.FAM) {
+        const family = entityDict.FAM[familyID];
+        if (!family.MARR) continue;
+        
+        if (entityDict.INDI[family.HUSB].DEAT && (entityDict.INDI[family.HUSB].DEAT.DATE < family.MARR)) {
+            console.log("Line " + family.MARR.DATE_LINE + " & " + entityDict.INDI[family.MARR].DEAT.DATE_LINE + ": " + family.HUSB + " Husband was married after death!");
+        }
+        if (entityDict.INDI[family.WIFE].DEAT && (entityDict.INDI[family.WIFE].DEAT.DATE < family.MARR)) {
+            console.log("Line " + family.MARR.DATE_LINE + " & " + entityDict.INDI[family.MARR].DEAT.DATE_LINE + ": " + family.WIFE + " Wife was married after death!");
+        }
+    }
+
+    return errorCnt;
 }
 
 //////////////////////////////////////////////////////
@@ -599,6 +627,8 @@ function ParseGedcomFile(iFileName) {
     errorCnt += checkMarriageBefore14();
     console.log("");
     errorCnt += checkDeathBeforeBirth();
+    console.log("");
+    errorCnt += checkDeathBeforeMarriage();
     //
 
     console.log("");
