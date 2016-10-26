@@ -19,7 +19,7 @@ ID     NAME               SEX  BIRT          FAMS  FAMC  AGE  DEAT
 @I14@  Mark /Marris/      F    11/14/1800    @F1@        215            
 @I15@  Mary /Brown/       F    09/24/2016          @F1@  0              
 @I16@  Derek /Brown/      M    Invalid date  @F6@  @F2@  NaN            
-@I17@  Rachel /Greene/    F    10/20/1993    @F6@        22             
+@I17@  Rachel /Greene/    F    10/20/1993    @F6@        23             
 @I18@  Richard /Brown/    M    11/14/2012          @F6@  3    10/11/2016
 @I19@  Phil /Green/       M    07/03/1951          @F5@  65             
 
@@ -53,7 +53,7 @@ US27: List Individual Ages
 @I14@: 215
 @I15@: 0
 @I16@: NaN
-@I17@: 22
+@I17@: 23
 @I18@: 3
 @I19@: 65
 
@@ -63,8 +63,6 @@ US29: List Deceased
 @I18@
 
 US35: List Recent Births
-@I13@
-@I15@
 
 US36: List Recent Deaths
 @I18@
@@ -72,7 +70,6 @@ US36: List Recent Deaths
 US38: List Upcoming Birthdays
 @I4@: 11/15/1918
 @I14@: 11/14/1800
-@I17@: 10/20/1993
 
 US28: Order Siblings by Age
 @F1@: @I13@,@I15@
@@ -101,5 +98,6 @@ Line 198: @F1@ HUSB is not of gender 'M'!
 US10: Marriage after 14
 Line 175&245: @F6@ WIFE was not at least 14 when he got married!
 
-There were 6 errors in this Gedcom file!
-Check above for details on these errors!
+US03: Birth Before Death
+
+There were NaN errors in this Gedcom file!

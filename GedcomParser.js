@@ -368,7 +368,7 @@ function checkGenderAndRole() {
 /*
 Input: none
 Return: integer
-Description: Checks all families and verifies that no one got married before they were 12 years old
+Description: Checks all families and verifies that no one got married before they were 14 years old
 */
 function checkMarriageBefore14() {
     console.debug("Checking for husbands and/or wives that were younger than 14 when they got married...");
@@ -418,6 +418,27 @@ function checkInvalidDates() {
     }
 
     return errorCnt;
+}
+
+/*
+Input: none
+Return: integer
+Description: Checks all dates on individuals to make sure birth is before death
+*/
+function checkDeathBeforeBirth() {
+    console.debug("Checking for deaths before births...");
+    console.log("US03: Birth Before Death");
+    let errorCnt = 0;
+
+    // Check each individual
+    for (const individualID in entityDict.INDI) {
+        const individual = entityDict.INDI[individualID];
+        if (!individual.DEAT) continue;
+        if (individual.BIRT.DATE > individual.DEAT.DATE) {
+            console.log("Line " + individual.BIRT_LINE + " & " + individual.DEAT_LINE + ": " + individualID + " Birth is after death!");
+            ++errorCnt;
+        }
+    }
 }
 
 //////////////////////////////////////////////////////
@@ -576,6 +597,8 @@ function ParseGedcomFile(iFileName) {
     errorCnt += checkGenderAndRole();
     console.log("");
     errorCnt += checkMarriageBefore14();
+    console.log("");
+    errorCnt += checkDeathBeforeBirth();
     //
 
     console.log("");
