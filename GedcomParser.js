@@ -378,12 +378,12 @@ function checkMarriageBefore14() {
         const family = entityDict.FAM[familyID];
         if (!family.MARR) continue;
         if (getDiffInYears(entityDict.INDI[family.HUSB].BIRT, family.MARR) < 14) {
-            let lines = [family.MARR_LINE, entityDict.INDI[family.HUSB].BIRT_LINE].sort().join("&");
+            let lines = [family.MARR_LINE, entityDict.INDI[family.HUSB].BIRT_LINE].sort().join(" & ");
             console.log("Line " + lines + ": " + familyID + " HUSB was not at least 14 when he got married!");
             ++errorCnt;
         }
         if (getDiffInYears(entityDict.INDI[family.WIFE].BIRT, family.MARR) < 14) {
-            let lines = [family.MARR_LINE, entityDict.INDI[family.WIFE].BIRT_LINE].sort().join("&");
+            let lines = [family.MARR_LINE, entityDict.INDI[family.WIFE].BIRT_LINE].sort().join(" & ");
             console.log("Line " + lines + ": " + familyID + " WIFE was not at least 14 when he got married!");
             ++errorCnt;
         }
@@ -434,8 +434,8 @@ function checkDeathBeforeBirth() {
     for (const individualID in entityDict.INDI) {
         const individual = entityDict.INDI[individualID];
         if (!individual.DEAT) continue;
-        if (individual.BIRT.DATE > individual.DEAT.DATE) {
-            console.log("Line " + individual.BIRT.DATE_LINE + " & " + individual.DEAT.DATE_LINE + ": " + individualID + " Birth is after death!");
+        if (individual.BIRT > individual.DEAT) {
+            console.log("Line " + individual.BIRT_LINE + " & " + individual.DEAT_LINE + ": " + individualID + " Birth is after death!");
             ++errorCnt;
         }
     }
@@ -458,11 +458,13 @@ function checkDeathBeforeMarriage() {
         const family = entityDict.FAM[familyID];
         if (!family.MARR) continue;
         
-        if (entityDict.INDI[family.HUSB].DEAT && (entityDict.INDI[family.HUSB].DEAT.DATE < family.MARR)) {
-            console.log("Line " + family.MARR.DATE_LINE + " & " + entityDict.INDI[family.MARR].DEAT.DATE_LINE + ": " + family.HUSB + " Husband was married after death!");
+        if (entityDict.INDI[family.HUSB].DEAT && (entityDict.INDI[family.HUSB].DEAT < family.MARR)) {
+            console.log("Line " + family.MARR_LINE + " & " + entityDict.INDI[family.HUSB].DEAT_LINE + ": " + family.HUSB + " Husband was married after death!");
+            ++errorCnt;
         }
         if (entityDict.INDI[family.WIFE].DEAT && (entityDict.INDI[family.WIFE].DEAT.DATE < family.MARR)) {
-            console.log("Line " + family.MARR.DATE_LINE + " & " + entityDict.INDI[family.MARR].DEAT.DATE_LINE + ": " + family.WIFE + " Wife was married after death!");
+            console.log("Line " + family.MARR_LINE + " & " + entityDict.INDI[family.WIFE].DEAT_LINE + ": " + family.WIFE + " Wife was married after death!");
+            ++errorCnt;
         }
     }
 
