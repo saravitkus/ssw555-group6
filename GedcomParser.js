@@ -565,6 +565,23 @@ function listChildrenSortedAge() {
     }
 }
 
+/*
+Input: none
+Return: none
+Description: Outputs all families who have an anniversary in the next 30 days to the file
+*/
+function listUpcomingAnniversaries() {
+    console.log("US39: List Upcoming Anniversaries");
+    for (const familyID in entityDict.FAM) {
+        const family = entityDict.FAM[familyID];
+        if (family.MARR != undefined && family.DIV === undefined && entityDict.INDI[family.HUSB].DEAT === undefined && entityDict.INDI[family.WIFE].DEAT === undefined) {
+            let daysUntilAnniversary = getDaysUntilDate(family.MARR);
+            if (daysUntilAnniversary < 30 && daysUntilAnniversary > 0) {
+                console.log(familyID + ": " + family.MARR.toString());
+            }
+        }
+    }
+}
 
 //////////////////////////////////////////////////////
 
@@ -607,6 +624,9 @@ function ParseGedcomFile(iFileName) {
     listUpcomingBirthdays();
     console.log("");
     listChildrenSortedAge();
+    console.log("");
+    listUpcomingAnniversaries();
+    console.log("");
     //
 
     console.log("");
