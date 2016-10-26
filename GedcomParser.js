@@ -469,6 +469,34 @@ function checkDeathBeforeMarriage() {
     return errorCnt;
 }
 
+/*
+Input: none
+Return: integer
+Description: Checks all dates on individuals to make sure birth is before marriage
+*/
+function checkMarriageBeforeBirth() {
+    console.debug("Checking for marriages before births...");
+    console.log("US02: Birth Before Marriage");
+    let errorCnt = 0;
+
+    // Check each family
+    for (const familyID in entityDict.FAM) {
+        const family = entityDict.FAM[familyID];
+        if (!family.MARR) continue;
+        
+        if (entityDict.INDI[family.HUSB].BIRT > family.MARR) {
+            console.log("Line " + family.MARR_LINE + " & " + entityDict.INDI[family.HUSB].BIRT_LINE + ": " + familyID + " Husband was married before birth!");
+            ++errorCnt;
+        }
+        if (entityDict.INDI[family.WIFE].BIRT > family.MARR) {
+            console.log("Line " + family.MARR_LINE + " & " + entityDict.INDI[family.WIFE].BIRT_LINE + ": " + familyID + " Wife was married before birth!");
+            ++errorCnt;
+        }
+    }
+
+    return errorCnt;
+}
+
 //////////////////////////////////////////////////////
 
 // Lists Generated
@@ -649,6 +677,8 @@ function ParseGedcomFile(iFileName) {
     errorCnt += checkDeathBeforeBirth();
     console.log("");
     errorCnt += checkDeathBeforeMarriage();
+    console.log("");
+    errorCnt += checkMarriageBeforeBirth();
     //
 
     console.log("");

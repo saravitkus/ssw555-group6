@@ -119,5 +119,9 @@ US03: Birth Before Death
 
 US05: Marriage Before Death
 
-There were 6 errors in this Gedcom file!
+US02: Birth Before Marriage
+Line 255 & 101: @F4@ Husband was married before birth!
+Line 255 & 110: @F4@ Wife was married before birth!
+
+There were 11 errors in this Gedcom file!
 Check above for details on these errors!
