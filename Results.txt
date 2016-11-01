@@ -89,7 +89,6 @@ US28: Order Siblings by Age
 @F7@: @I18@
 
 US39: List Upcoming Anniversaries
-@F2@: 10/31/1981
 @F7@: 11/15/1998
 
 
@@ -110,18 +109,27 @@ US21: Correct Gender for Role
 Line 224: @F1@ HUSB is not of gender 'M'!
 
 US10: Marriage after 14
-Line 101&255: @F4@ HUSB was not at least 14 when he got married!
-Line 110&255: @F4@ WIFE was not at least 14 when he got married!
-Line 180&281: @F7@ WIFE was not at least 14 when he got married!
-Line 200&287: @F8@ HUSB was not at least 14 when he got married!
+Line 101 & 255: @F4@ HUSB was not at least 14 when he got married!
+Line 110 & 255: @F4@ WIFE was not at least 14 when he got married!
+Line 180 & 281: @F7@ WIFE was not at least 14 when he got married!
+Line 200 & 287: @F8@ HUSB was not at least 14 when he got married!
 
 US03: Birth Before Death
+Line 119 & 121: @I11@ Birth is after death!
+Line 159 & 161: @I15@ Birth is after death!
 
 US05: Marriage Before Death
+Line 272 & 221: @I21@ Husband was married after death!
 
 US02: Birth Before Marriage
 Line 255 & 101: @F4@ Husband was married before birth!
 Line 255 & 110: @F4@ Wife was married before birth!
 
-There were 11 errors in this Gedcom file!
+US04: Marriage Before Divorce
+Line 287 & 289: Divorce(06/13/1959) before Marriage(04/04/1960)!
+
+US06: Divorce Before Death
+Line 221 & 274: Divorce(07/08/1999) before Death of HUSB(11/05/1980)!
+
+There were 16 errors in this Gedcom file!
 Check above for details on these errors!

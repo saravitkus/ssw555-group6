@@ -10,19 +10,7 @@ const fs = require('fs'); // File system
 const util = require('util');
 const moment = require('moment');
 require('console.table'); // Adds console.table()
-
-// Setup console.debug:
-(() => {
-    let logFile = fs.createWriteStream('results.txt', { flags: 'w' });
-    let logStdout = process.stdout;
-    console.debug = console.log; // debug doesn't log to file!
-    console.log = function() {
-        // Logs to the file as well:
-        logFile.write(util.format.apply(null, arguments).replace(/([^\r])\n/gm, "$1\r\n") + '\r\n');
-        //logStdout.write(util.format.apply(null, arguments) + '\r\n');
-        console.debug.apply(console, arguments);
-    };
-})();
+console.debug = console.log; // debug doesn't log to file!
 
 // Set default toString for Date to be of local date format:
 Date.prototype.toString = Date.prototype.toLocaleDateString;
@@ -457,7 +445,7 @@ function checkDeathBeforeMarriage() {
     for (const familyID in entityDict.FAM) {
         const family = entityDict.FAM[familyID];
         if (!family.MARR) continue;
-        
+
         if (entityDict.INDI[family.HUSB].DEAT && (entityDict.INDI[family.HUSB].DEAT < family.MARR)) {
             console.log("Line " + family.MARR_LINE + " & " + entityDict.INDI[family.HUSB].DEAT_LINE + ": " + family.HUSB + " Husband was married after death!");
             ++errorCnt;
@@ -485,7 +473,7 @@ function checkMarriageBeforeBirth() {
     for (const familyID in entityDict.FAM) {
         const family = entityDict.FAM[familyID];
         if (!family.MARR) continue;
-        
+
         if (entityDict.INDI[family.HUSB].BIRT > family.MARR) {
             console.log("Line " + family.MARR_LINE + " & " + entityDict.INDI[family.HUSB].BIRT_LINE + ": " + familyID + " Husband was married before birth!");
             ++errorCnt;
@@ -493,6 +481,57 @@ function checkMarriageBeforeBirth() {
         if (entityDict.INDI[family.WIFE].BIRT > family.MARR) {
             console.log("Line " + family.MARR_LINE + " & " + entityDict.INDI[family.WIFE].BIRT_LINE + ": " + familyID + " Wife was married before birth!");
             ++errorCnt;
+        }
+    }
+
+    return errorCnt;
+}
+
+/*
+Input: none
+Return: integer
+Description: Checks all families for divorces before marriages.
+*/
+function checkDivorceBeforeMarriage(entityDict) {
+    console.debug("Checking for divorces before marriages...");
+    console.log("US04: Marriage Before Divorce");
+    let errorCnt = 0;
+
+    // Check each family
+    for (const familyID in entityDict.FAM) {
+        const family = entityDict.FAM[familyID];
+
+        // In JavaScript, if DIV or MARR is undefined, the result is false, otherwise it computes the comparison:
+        if (family.DIV < family.MARR) {
+            console.log("Line " + family.MARR_LINE + " & " + family.DIV_LINE + ": Divorce(" + family.DIV.toString() + ") before Marriage(" + family.MARR.toString() + ")!");
+            ++errorCnt;
+        }
+    }
+
+    return errorCnt;
+}
+
+/*
+Input: none
+Return: integer
+Description: Checks all families for death before divorce.
+*/
+function checkDeathBeforeDivorce(entityDict) {
+    console.debug("Checking for deaths before divorce...");
+    console.log("US06: Divorce Before Death");
+    let errorCnt = 0;
+
+    // Check each family
+    for (const familyID in entityDict.FAM) {
+        const family = entityDict.FAM[familyID];
+
+        for (const tag of ["HUSB", "WIFE"]) {
+            const entity = entityDict.INDI[family[tag]];
+            // In JavaScript, if DIV or DEAT is undefined, the result is false, otherwise it computes the comparison:
+            if (entity.DEAT < family.DIV) {
+                console.log("Line " + entity.DEAT_LINE + " & " + family.DIV_LINE + ": Divorce(" + family.DIV.toString() + ") before Death of " + tag + "(" + entity.DEAT.toString() + ")!");
+                ++errorCnt;
+            }
         }
     }
 
@@ -604,7 +643,7 @@ function listUpcomingAnniversaries() {
     console.log("US39: List Upcoming Anniversaries");
     for (const familyID in entityDict.FAM) {
         const family = entityDict.FAM[familyID];
-        if (family.MARR != undefined && family.DIV === undefined && entityDict.INDI[family.HUSB].DEAT === undefined && entityDict.INDI[family.WIFE].DEAT === undefined) {
+        if (family.MARR !== undefined && family.DIV === undefined && entityDict.INDI[family.HUSB].DEAT === undefined && entityDict.INDI[family.WIFE].DEAT === undefined) {
             let daysUntilAnniversary = getDaysUntilDate(family.MARR);
             if (daysUntilAnniversary < 30 && daysUntilAnniversary > 0) {
                 console.log(familyID + ": " + family.MARR.toString());
@@ -681,6 +720,10 @@ function ParseGedcomFile(iFileName) {
     errorCnt += checkDeathBeforeMarriage();
     console.log("");
     errorCnt += checkMarriageBeforeBirth();
+    console.log("");
+    errorCnt += checkDivorceBeforeMarriage(entityDict);
+    console.log("");
+    errorCnt += checkDeathBeforeDivorce(entityDict);
     //
 
     console.log("");
@@ -690,6 +733,26 @@ function ParseGedcomFile(iFileName) {
     return (errorCnt === 0);
 }
 
-// Main function to set up file to be parsed and where to put the data
-const success = ParseGedcomFile("GEDCOM.txt");
-if (success) console.debug("All done!");
+if (!module.parent) { // Is run by itself, compute normal output
+    // Setup console.debug:
+    (() => {
+        let logFile = fs.createWriteStream('results.txt', { flags: 'w' });
+        let logStdout = process.stdout;
+        console.log = function() {
+            // Logs to the file as well:
+            logFile.write(util.format.apply(null, arguments).replace(/([^\r])\n/gm, "$1\r\n") + '\r\n');
+            //logStdout.write(util.format.apply(null, arguments) + '\r\n');
+            console.debug.apply(console, arguments);
+        };
+    })();
+
+    // Main function to set up file to be parsed and where to put the data
+    const success = ParseGedcomFile("GEDCOM.txt");
+    if (success) console.debug("All done!");
+} else { // Else is loaded from another script (like tests), so export module features:
+    module.exports = {
+        formatDate,
+        checkDivorceBeforeMarriage,
+        checkDeathBeforeDivorce
+    };
+}

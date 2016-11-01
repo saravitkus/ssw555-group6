@@ -1,0 +1,40 @@
+
+
+  GEDCOM Parser
+    US04
+Checking for divorces before marriages...
+US04: Marriage Before Divorce
+Line 0 & 1: Divorce(03/12/1999) before Marriage(03/16/1999)!
+      √ error on divorce before marriage
+Checking for divorces before marriages...
+US04: Marriage Before Divorce
+      √ no error no marriage
+Checking for divorces before marriages...
+US04: Marriage Before Divorce
+      √ no error on marriage before divorce
+Checking for divorces before marriages...
+US04: Marriage Before Divorce
+      √ no error on no divorce
+    US06
+Checking for deaths before divorce...
+US06: Divorce Before Death
+Line 0 & 1: Divorce(03/12/1999) before Death of HUSB(03/10/1999)!
+      √ error on one death before divorce
+Checking for deaths before divorce...
+US06: Divorce Before Death
+Line 0 & 2: Divorce(03/12/1999) before Death of HUSB(03/10/1999)!
+Line 1 & 2: Divorce(03/12/1999) before Death of WIFE(03/11/1999)!
+      √ errors on two deaths before divorce
+Checking for deaths before divorce...
+US06: Divorce Before Death
+      √ no error on no death
+Checking for deaths before divorce...
+US06: Divorce Before Death
+      √ no error on no divorce
+Checking for deaths before divorce...
+US06: Divorce Before Death
+      √ no error on divorce before death
+
+
+  9 passing (13ms)
+
