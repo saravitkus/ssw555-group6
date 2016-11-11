@@ -711,6 +711,23 @@ function listUpcomingAnniversaries() {
     }
 }
 
+/*
+Input: none
+Return: none
+Description: Outputs all siblings who are part of multiple births
+*/
+function listMultipleBirths() {
+    console.log("US32: List Multiple Births");
+    // Loop through families
+    for (const familyID in entityDict.FAM) {
+        const family = entityDict.FAM[familyID];
+        // Loop through multiple birth groups
+        for (let group of family.MultiBirth) {
+            console.log(group + ": " + entityDict.INDI[group[0]].BIRT.toString()); // group[0] refers to one of the children in the multbirth
+        }
+    }
+}
+
 //////////////////////////////////////////////////////
 
 /*
@@ -756,6 +773,8 @@ function ParseGedcomFile(iFileName) {
     listChildrenSortedAge();
     console.log("");
     listUpcomingAnniversaries();
+    console.log("");
+    listMultipleBirths();
     console.log("");
     //
 

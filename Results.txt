@@ -90,6 +90,10 @@ US28: Order Siblings by Age
 US39: List Upcoming Anniversaries
 @F7@: 11/15/1998
 
+US32: List Multiple Births
+@I13@,@I15@: 09/24/2016
+@I6@,@I8@: 10/07/1960
+
 
 
 Errors:
