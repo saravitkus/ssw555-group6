@@ -74,7 +74,6 @@ US29: List Deceased
 US35: List Recent Births
 
 US36: List Recent Deaths
-@I18@
 
 US38: List Upcoming Birthdays
 @I4@: 11/15/1918
@@ -130,6 +129,8 @@ Line 287 & 289: Divorce(06/13/1959) before Marriage(04/04/1960)!
 
 US06: Divorce Before Death
 Line 221 & 274: Divorce(07/08/1999) before Death of HUSB(11/05/1980)!
+
+US14: Multiple Births Less than 5
 
 There were 16 errors in this Gedcom file!
 Check above for details on these errors!

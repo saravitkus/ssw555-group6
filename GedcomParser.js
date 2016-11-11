@@ -88,7 +88,7 @@ function getDiffInYears(firstDate, secondDate) {
 /*
 Input: firstDate, secondDate: string
 Return: Integer
-Description: Returns the number of days between two Date objects
+Description: Returns the number of days between two Date objects rounded down
 */
 function getDiffInDays(firstDate, secondDate) {
     return secondDate.diff(firstDate, 'days');
@@ -271,6 +271,35 @@ function sortSiblings() {
         sortedSiblings.sort((a, b) => {
             return entityDict.INDI[a].BIRT.diff(entityDict.INDI[b].BIRT);
         });
+    }
+}
+
+function lookForMultipleBirths() {
+    console.debug("Looking for multiple births...");
+    // Loop through families
+    for (const familyID in entityDict.FAM) {
+        const family = entityDict.FAM[familyID];
+        const children = family.CHIL || [];
+        
+        // Loop through presorted children
+        family.MultiBirth = [];
+        let twinDex = 0;
+        let childIndex = 0;
+        while(childIndex < children.length - 1) {
+            let firstChild = children[childIndex];
+            let nextChild = children[++childIndex];
+
+            if (getDiffInDays(entityDict.INDI[firstChild].BIRT, entityDict.INDI[nextChild].BIRT) === 0) { // if multiple birth
+                family.MultiBirth[twinDex] = [firstChild, nextChild];
+
+                // Check next children for multiple birth
+                for (++childIndex; childIndex < children.length && entityDict.INDI[nextChild].BIRT.getDiffInDays(entityDict.INDI[children[childIndex]].BIRT) === 0; ++childIndex) {
+                    family.MultiBirth[twinDex].push(children[childIndex]);
+                }
+
+                ++twinDex; // increment index of multiple birth siblings group
+            }
+        }
     }
 }
 
@@ -538,6 +567,36 @@ function checkDeathBeforeDivorce(entityDict) {
     return errorCnt;
 }
 
+/*
+Input: none
+Return: integer
+Description: Checks to make sure there are 5 or fewer siblings born at the same time
+*/
+function checkMultipleBirthsLessThan5() {
+    console.debug("Checking for more than 5 siblings born at the same time...");
+    console.log("US14: Multiple Births Less than 5");
+    let errorCnt = 0;
+
+    // Loop through families
+    for (const familyID in entityDict.FAM) {
+        const family = entityDict.FAM[familyID];
+
+        // Loop through multiple birth list
+        for (let group of family.MultiBirth) {
+            if (group.length > 5) {
+                let stringOut = "Line " + entityDict.INDI[group[0]].BIRT_LINE;
+                for (let individualID of group) {
+                    stringOut.concat(" & ", entityDict.INDI[individualID].BIRT_LINE);
+                }
+                stringOut.concat(": More than 5 siblings born at the same time!")
+                ++errorCnt;
+            }
+        }
+    }
+
+    return errorCnt;
+}
+
 //////////////////////////////////////////////////////
 
 // Lists Generated
@@ -679,6 +738,8 @@ function ParseGedcomFile(iFileName) {
 
     printEntities();
 
+    lookForMultipleBirths();
+
     console.log("Lists:");
     console.log("");
     // Lists Generated
@@ -724,6 +785,8 @@ function ParseGedcomFile(iFileName) {
     errorCnt += checkDivorceBeforeMarriage(entityDict);
     console.log("");
     errorCnt += checkDeathBeforeDivorce(entityDict);
+    console.log("");
+    errorCnt += checkMultipleBirthsLessThan5();
     //
 
     console.log("");
