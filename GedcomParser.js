@@ -274,6 +274,11 @@ function sortSiblings() {
     }
 }
 
+/*
+Input: none
+Return: none
+Description: Looks through families for multiple births and makes a new list of lists of siblings that have that were born together
+*/
 function lookForMultipleBirths() {
     console.debug("Looking for multiple births...");
     // Loop through families
