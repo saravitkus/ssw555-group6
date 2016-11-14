@@ -37,11 +37,11 @@ US06: Divorce Before Death
     US22
 Checking for individuals or families who share an ID...
 US22: Unique IDs
-Line 1 & 2: INDI ID (@I1@) is duplicated
+Line 1 & 2: INDI ID(@I1@) is duplicated!
       √ error on shared INDI ID
 Checking for individuals or families who share an ID...
 US22: Unique IDs
-Line 1 & 2: FAM ID (@F1@) is duplicated
+Line 1 & 2: FAM ID(@F1@) is duplicated!
       √ error on shared FAM ID
 Checking for individuals or families who share an ID...
 US22: Unique IDs
@@ -49,7 +49,21 @@ US22: Unique IDs
 Checking for individuals or families who share an ID...
 US22: Unique IDs
       √ no error on unique IDs
+    US23
+Checking for individuals with the same name and birthday...
+US23: Unique Name and Birth Date
+Line 1 & 2: Share the same name(John Smith) and birthday(03/16/1999)!
+      √ error on shared NAME and BIRT
+Checking for individuals with the same name and birthday...
+US23: Unique Name and Birth Date
+      √ no error on unique NAME, same BIRT
+Checking for individuals with the same name and birthday...
+US23: Unique Name and Birth Date
+      √ no error on unique BIRT, same NAME
+Checking for individuals with the same name and birthday...
+US23: Unique Name and Birth Date
+      √ no error on unique BIRT and NAME
 
 
-  13 passing (13ms)
+  17 passing (17ms)
 

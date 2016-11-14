@@ -634,10 +634,43 @@ function checkUniqueIDs(entityDict) {
 
             // Check if ID is duplicated:
             if (entities.length > 1) {
-                let linesOut = "Line " + entities.map((entity) => { return entity.ID_LINE; }).join(" & ");
-                console.log(linesOut + ": " + tag + " ID (" + uniqueID + ") is duplicated");
+                let linesOut = "Line " + entities.map((entity) => { return entity.ID_LINE; }).sort().join(" & ");
+                console.log(linesOut + ": " + tag + " ID(" + uniqueID + ") is duplicated!");
                 ++errorCnt;
             }
+        }
+    }
+
+    return errorCnt;
+}
+
+/*
+Input: none
+Return: integer
+Description: Checks to make unique names and birth days for each individual
+*/
+function checkUniqueNameAndBirths(entityDict) {
+    console.debug("Checking for individuals with the same name and birthday...");
+    console.log("US23: Unique Name and Birth Date");
+    let errorCnt = 0;
+    let uniqueDict = {};
+
+    // Build unique list:
+    for (const entityID in entityDict.INDI) {
+        const entity = entityDict.INDI[entityID];
+        const key = entity.NAME + "|" + entity.BIRT.toString();
+        if (!uniqueDict[key]) uniqueDict[key] = [];
+        uniqueDict[key].push(entity);
+    }
+
+    for (const key in uniqueDict) {
+        const entities = uniqueDict[key];
+
+        // Check if ID is duplicated:
+        if (entities.length > 1) {
+            let linesOut = "Line " + entities.map((entity) => { return entity.ID_LINE; }).sort().join(" & ");
+            console.log(linesOut + ": Share the same name(" + entities[0].NAME + ") and birthday(" + entities[0].BIRT.toString() + ")!");
+            ++errorCnt;
         }
     }
 
@@ -898,6 +931,8 @@ function ParseGedcomFile(iFileName) {
     errorCnt += checkMultipleBirthsLessThan5();
     console.log("");
     errorCnt += checkUniqueIDs(entityDict);
+    console.log("");
+    errorCnt += checkUniqueNameAndBirths(entityDict);
     //
 
     console.log("");
@@ -928,6 +963,7 @@ if (!module.parent) { // Is run by itself, compute normal output
         formatDate,
         checkDivorceBeforeMarriage,
         checkDeathBeforeDivorce,
-        checkUniqueIDs
+        checkUniqueIDs,
+        checkUniqueNameAndBirths
     };
 }

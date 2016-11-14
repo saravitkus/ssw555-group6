@@ -160,4 +160,78 @@ describe("GEDCOM Parser", function () {
             }), 0);
         });
     });
+
+    describe("US23", function () {
+        // Check errors and abnormal conditions:
+        it("error on shared NAME and BIRT", function () {
+            assert.equal(gedcomParser.checkUniqueNameAndBirths({
+                INDI: {
+                    "@I1@": {
+                        ID_LINE: 1,
+                        NAME: "John Smith",
+                        BIRT: gedcomParser.formatDate("16 MAR 1999")
+                    },
+                    "@I2@": {
+                        ID_LINE: 2,
+                        NAME: "John Smith",
+                        BIRT: gedcomParser.formatDate("16 MAR 1999")
+                    },
+                },
+                FAM: { }
+            }), 1);
+        });
+
+        // Check normal conditions:
+        it("no error on unique NAME, same BIRT", function () {
+            assert.equal(gedcomParser.checkUniqueNameAndBirths({
+                INDI: {
+                    "@I1@": {
+                        ID_LINE: 1,
+                        NAME: "Joe Smith",
+                        BIRT: gedcomParser.formatDate("16 MAR 1999")
+                    },
+                    "@I2@": {
+                        ID_LINE: 2,
+                        NAME: "John Smith",
+                        BIRT: gedcomParser.formatDate("16 MAR 1999")
+                    },
+                },
+                FAM: { }
+            }), 0);
+        });
+        it("no error on unique BIRT, same NAME", function () {
+            assert.equal(gedcomParser.checkUniqueNameAndBirths({
+                INDI: {
+                    "@I1@": {
+                        ID_LINE: 1,
+                        NAME: "John Smith",
+                        BIRT: gedcomParser.formatDate("15 MAR 1999")
+                    },
+                    "@I2@": {
+                        ID_LINE: 2,
+                        NAME: "John Smith",
+                        BIRT: gedcomParser.formatDate("16 MAR 1999")
+                    },
+                },
+                FAM: { }
+            }), 0);
+        });
+        it("no error on unique BIRT and NAME", function () {
+            assert.equal(gedcomParser.checkUniqueNameAndBirths({
+                INDI: {
+                    "@I1@": {
+                        ID_LINE: 1,
+                        NAME: "Joe Smith",
+                        BIRT: gedcomParser.formatDate("15 MAR 1999")
+                    },
+                    "@I2@": {
+                        ID_LINE: 2,
+                        NAME: "John Smith",
+                        BIRT: gedcomParser.formatDate("16 MAR 1999")
+                    },
+                },
+                FAM: { }
+            }), 0);
+        });
+    });
 });

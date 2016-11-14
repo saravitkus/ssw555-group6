@@ -169,7 +169,10 @@ US14: Multiple Births Less than 5
 Line 230 & 230 & 239 & 248 & 257 & 266 & 275: More than 5 siblings born at the same time!
 
 US22: Unique IDs
-Line 268 & 277: INDI ID (@I27@) is duplicated
+Line 268 & 277: INDI ID(@I27@) is duplicated!
 
-There were 18 errors in this Gedcom file!
+US23: Unique Name and Birth Date
+Line 223 & 232: Share the same name(Janice /Green/) and birthday(12/20/1994)!
+
+There were 19 errors in this Gedcom file!
 Check above for details on these errors!
