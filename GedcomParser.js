@@ -733,6 +733,44 @@ function listMultipleBirths() {
     }
 }
 
+/*
+Input: none
+Return: none
+Description: Outputs all living married individuals
+*/
+function listLivingMarried() {
+    console.log("US30: List Living Married");
+    for (const familyID in entityDict.FAM) {
+        let family = entityDict.FAM[familyID];
+        let husband = family.HUSB;
+        let wife = family.WIFE;
+        if (family.DIV === undefined && entityDict.INDI[husband].DEAT === undefined && entityDict.INDI[wife].DEAT === undefined){
+            console.log(husband);
+            console.log(wife);
+        }
+    }
+}
+
+/*
+Input: none
+Return: none
+Description: Outputs all living individuals over 30 who have never been married
+*/
+function listLivingSingle() {
+    console.log("US31: List Living Single");
+    let married = [];
+    for (const familyID in entityDict.FAM) {
+        let family = entityDict.FAM[familyID];
+        married.push(family.HUSB);
+        married.push(family.WIFE);
+    }
+    for (const individualID in entityDict.INDI){
+        if (entityDict.INDI[individualID].AGE > 30 && married.indexOf(individualID) === -1){
+            console.log(individualID);
+        }
+    }
+}
+
 //////////////////////////////////////////////////////
 
 /*
@@ -760,7 +798,7 @@ function ParseGedcomFile(iFileName) {
 
     printEntities();
 
-    lookForMultipleBirths();
+    //lookForMultipleBirths();
 
     console.log("Lists:");
     console.log("");
@@ -779,7 +817,11 @@ function ParseGedcomFile(iFileName) {
     console.log("");
     listUpcomingAnniversaries();
     console.log("");
-    listMultipleBirths();
+    //listMultipleBirths();
+    console.log("");
+    listLivingMarried();
+    console.log("");
+    listLivingSingle();
     console.log("");
     //
 
@@ -810,7 +852,7 @@ function ParseGedcomFile(iFileName) {
     console.log("");
     errorCnt += checkDeathBeforeDivorce(entityDict);
     console.log("");
-    errorCnt += checkMultipleBirthsLessThan5();
+    //errorCnt += checkMultipleBirthsLessThan5();
     //
 
     console.log("");
