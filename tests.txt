@@ -34,7 +34,22 @@ US06: Divorce Before Death
 Checking for deaths before divorce...
 US06: Divorce Before Death
       √ no error on divorce before death
+    US22
+Checking for individuals or families who share an ID...
+US22: Unique IDs
+Line 1 & 2: INDI ID (@I1@) is duplicated
+      √ error on shared INDI ID
+Checking for individuals or families who share an ID...
+US22: Unique IDs
+Line 1 & 2: FAM ID (@F1@) is duplicated
+      √ error on shared FAM ID
+Checking for individuals or families who share an ID...
+US22: Unique IDs
+      √ no error on shared FAM&INDI ID
+Checking for individuals or families who share an ID...
+US22: Unique IDs
+      √ no error on unique IDs
 
 
-  9 passing (13ms)
+  13 passing (13ms)
 

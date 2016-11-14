@@ -114,4 +114,50 @@ describe("GEDCOM Parser", function () {
             }), 0);
         });
     });
+
+    describe("US22", function () {
+        // Check errors and abnormal conditions:
+        it("error on shared INDI ID", function () {
+            assert.equal(gedcomParser.checkUniqueIDs({
+                INDI: {
+                    "@I1@": { ID: "@I1@", ID_ORIG: "@I1@", ID_LINE: 1 },
+                    "@I1@1": { ID: "@I1@1", ID_ORIG: "@I1@", ID_LINE: 2 },
+                },
+                FAM: { }
+            }), 1);
+        });
+        it("error on shared FAM ID", function () {
+            assert.equal(gedcomParser.checkUniqueIDs({
+                INDI: { },
+                FAM: {
+                    "@F1@": { ID: "@F1@", ID_ORIG: "@F1@", ID_LINE: 1 },
+                    "@F1@1": { ID: "@F1@1", ID_ORIG: "@F1@", ID_LINE: 2 },
+                }
+            }), 1);
+        });
+        it("no error on shared FAM&INDI ID", function () {
+            assert.equal(gedcomParser.checkUniqueIDs({
+                INDI: {
+                    "@1@": { ID: "@1@", ID_ORIG: "@1@", ID_LINE: 1 },
+                },
+                FAM: {
+                    "@1@1": { ID: "@1@1", ID_ORIG: "@1@", ID_LINE: 2 },
+                }
+            }), 0);
+        });
+
+        // Check normal conditions:
+        it("no error on unique IDs", function () {
+            assert.equal(gedcomParser.checkUniqueIDs({
+                INDI: {
+                    "@I1@": { ID: "@I1@", ID_ORIG: "@I1@", ID_LINE: 1 },
+                    "@I2@": { ID: "@I2@", ID_ORIG: "@I2@", ID_LINE: 2 },
+                },
+                FAM: {
+                    "@F1@": { ID: "@F1@", ID_ORIG: "@F1@", ID_LINE: 3 },
+                    "@F2@": { ID: "@F2@", ID_ORIG: "@F2@", ID_LINE: 4 },
+                }
+            }), 0);
+        });
+    });
 });

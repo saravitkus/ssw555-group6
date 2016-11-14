@@ -217,7 +217,12 @@ function ParseGedcomData(lines) {
         if (record.level === "0") currentEntity = null; // A 0 level tag resets the entity
 
         if (record.tag in entityDict) {
-            currentEntity = entityDict[record.tag][record.data] = { ID: record.data };
+            let ID = record.data;
+            let count = 0;
+            while (entityDict[record.tag][ID]) { // While ID exists, assign a new one:
+                ID = record.data + (++count);
+            }
+            currentEntity = entityDict[record.tag][ID] = { ID: ID, ID_ORIG: record.data };
             currentEntity.ID_LINE = lineIndex + 1; // Remember line number which it was parsed from
         } else if (currentEntity) {
             if (record.tag === "CHIL") {
@@ -285,7 +290,7 @@ function lookForMultipleBirths() {
     for (const familyID in entityDict.FAM) {
         const family = entityDict.FAM[familyID];
         const children = family.CHIL || [];
-        
+
         // Loop through presorted children
         family.MultiBirth = [];
         let twinDex = 0;
@@ -603,6 +608,43 @@ function checkMultipleBirthsLessThan5() {
     return errorCnt;
 }
 
+/*
+Input: none
+Return: integer
+Description: Checks to make sure no individuals share the same ID, or families.
+*/
+function checkUniqueIDs(entityDict) {
+    console.debug("Checking for individuals or families who share an ID...");
+    console.log("US22: Unique IDs");
+    let errorCnt = 0;
+
+    // Loop through all entities:
+    for (const tag in entityDict) {
+        let uniqueIDs = {};
+
+        // Build uniqueID list:
+        for (const entityID in entityDict[tag]) {
+            const entity = entityDict[tag][entityID];
+            if (!uniqueIDs[entity.ID_ORIG]) uniqueIDs[entity.ID_ORIG] = [];
+            uniqueIDs[entity.ID_ORIG].push(entity);
+        }
+
+        for (const uniqueID in uniqueIDs) {
+            const entities = uniqueIDs[uniqueID];
+
+            // Check if ID is duplicated:
+            if (entities.length > 1) {
+                let linesOut = "Line " + entities.map((entity) => { return entity.ID_LINE; }).join(" & ");
+                console.log(linesOut + ": " + tag + " ID (" + uniqueID + ") is duplicated");
+                ++errorCnt;
+            }
+        }
+    }
+
+    return errorCnt;
+}
+
+
 //////////////////////////////////////////////////////
 
 // Lists Generated
@@ -678,7 +720,7 @@ function listUpcomingBirthdays() {
         const individual = entityDict.INDI[individualID];
         if (individual.DEAT === undefined) {
             let daysUntilBday = getDaysUntilDate(individual.BIRT);
-            if (daysUntilBday < 30 && daysUntilBday > 0) {
+            if (daysUntilBday < 30 && daysUntilBday >= 0) {
                 console.log(individualID + ": " + individual.BIRT.toString());
             }
         }
@@ -710,7 +752,7 @@ function listUpcomingAnniversaries() {
         const family = entityDict.FAM[familyID];
         if (family.MARR !== undefined && family.DIV === undefined && entityDict.INDI[family.HUSB].DEAT === undefined && entityDict.INDI[family.WIFE].DEAT === undefined) {
             let daysUntilAnniversary = getDaysUntilDate(family.MARR);
-            if (daysUntilAnniversary < 30 && daysUntilAnniversary > 0) {
+            if (daysUntilAnniversary < 30 && daysUntilAnniversary >= 0) {
                 console.log(familyID + ": " + family.MARR.toString());
             }
         }
@@ -854,6 +896,8 @@ function ParseGedcomFile(iFileName) {
     errorCnt += checkDeathBeforeDivorce(entityDict);
     console.log("");
     errorCnt += checkMultipleBirthsLessThan5();
+    console.log("");
+    errorCnt += checkUniqueIDs(entityDict);
     //
 
     console.log("");
@@ -883,6 +927,7 @@ if (!module.parent) { // Is run by itself, compute normal output
     module.exports = {
         formatDate,
         checkDivorceBeforeMarriage,
-        checkDeathBeforeDivorce
+        checkDeathBeforeDivorce,
+        checkUniqueIDs
     };
 }
