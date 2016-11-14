@@ -102,6 +102,10 @@ US28: Order Siblings by Age
 US39: List Upcoming Anniversaries
 @F7@: 11/15/1998
 
+US32: List Multiple Births
+@I14@,@I16@: 09/24/2016
+@I6@,@I8@: 10/07/1960
+@I22@,@I23@,@I24@,@I25@,@I26@,@I27@: 12/20/1994
 
 US30: List Living Married
 @I15@
@@ -158,6 +162,8 @@ Line 347 & 349: Divorce(06/13/1959) before Marriage(04/04/1960)!
 US06: Divorce Before Death
 Line 103 & 328: Divorce(07/08/1999) before Death of HUSB(11/05/1980)!
 
+US14: Multiple Births Less than 5
+Line 230 & 230 & 239 & 248 & 257 & 266 & 275: More than 5 siblings born at the same time!
 
-There were 16 errors in this Gedcom file!
+There were 17 errors in this Gedcom file!
 Check above for details on these errors!

@@ -298,7 +298,7 @@ function lookForMultipleBirths() {
                 family.MultiBirth[twinDex] = [firstChild, nextChild];
 
                 // Check next children for multiple birth
-                for (++childIndex; childIndex < children.length && entityDict.INDI[nextChild].BIRT.getDiffInDays(entityDict.INDI[children[childIndex]].BIRT) === 0; ++childIndex) {
+                for (++childIndex; childIndex < children.length && getDiffInDays(entityDict.INDI[nextChild].BIRT, entityDict.INDI[children[childIndex]].BIRT) === 0; ++childIndex) {
                     family.MultiBirth[twinDex].push(children[childIndex]);
                 }
 
@@ -591,9 +591,10 @@ function checkMultipleBirthsLessThan5() {
             if (group.length > 5) {
                 let stringOut = "Line " + entityDict.INDI[group[0]].BIRT_LINE;
                 for (let individualID of group) {
-                    stringOut.concat(" & ", entityDict.INDI[individualID].BIRT_LINE);
+                    stringOut += " & " + entityDict.INDI[individualID].BIRT_LINE;
                 }
-                stringOut.concat(": More than 5 siblings born at the same time!")
+                stringOut += ": More than 5 siblings born at the same time!";
+                console.log(stringOut);
                 ++errorCnt;
             }
         }
@@ -798,7 +799,7 @@ function ParseGedcomFile(iFileName) {
 
     printEntities();
 
-    //lookForMultipleBirths();
+    lookForMultipleBirths();
 
     console.log("Lists:");
     console.log("");
@@ -817,7 +818,7 @@ function ParseGedcomFile(iFileName) {
     console.log("");
     listUpcomingAnniversaries();
     console.log("");
-    //listMultipleBirths();
+    listMultipleBirths();
     console.log("");
     listLivingMarried();
     console.log("");
@@ -852,7 +853,7 @@ function ParseGedcomFile(iFileName) {
     console.log("");
     errorCnt += checkDeathBeforeDivorce(entityDict);
     console.log("");
-    //errorCnt += checkMultipleBirthsLessThan5();
+    errorCnt += checkMultipleBirthsLessThan5();
     //
 
     console.log("");
